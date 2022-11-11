@@ -2,7 +2,7 @@ import PostItem from "./PostItem"
 import { useSelector, useDispatch } from "react-redux"
 import { getPosts, reset } from "../../features/posts/postSlice"
 import React from "react"
-import { Box, Button, Fab, Typography } from "@mui/material"
+import { Box, Button, Container, Fab, Typography } from "@mui/material"
 import { Link } from "react-router-dom"
 import AddIcon from "@mui/icons-material/Add"
 
@@ -13,19 +13,9 @@ const Diaries = () => {
 
   React.useEffect(() => {
     dispatch(getPosts())
-
-    // return () => {
-    //   dispatch(reset())
-    // }
   }, [dispatch])
   return (
-    <>
-      <Typography variant="h3" textAlign={"center"} padding={3}>
-        Posts{" "}
-        <Fab color="primary" aria-label="add" component={Link} to="/posts/add">
-          <AddIcon />
-        </Fab>
-      </Typography>
+    <Container maxWidth="lg">
       {posts.length ? (
         <Box>
           {posts.map((post) => (
@@ -41,7 +31,7 @@ const Diaries = () => {
           </Box>
         </>
       )}
-    </>
+    </Container>
   )
 }
 export default Diaries

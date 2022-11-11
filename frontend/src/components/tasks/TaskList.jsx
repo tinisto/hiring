@@ -3,7 +3,7 @@ import Task from "./Task"
 import { getAllTasks } from "../../features/tasks/taskSlice.js"
 import { useDispatch, useSelector } from "react-redux"
 import React from "react"
-import { Typography } from "@mui/material"
+import { Container, Typography } from "@mui/material"
 
 const TaskList = () => {
   const dispatch = useDispatch()
@@ -13,7 +13,7 @@ const TaskList = () => {
   }, [dispatch])
 
   return (
-    <>
+    <Container maxWidth="lg">
       <Typography
         variant="h5"
         textAlign={"center"}
@@ -35,7 +35,7 @@ const TaskList = () => {
           No tasks yet
         </Typography>
       )}
-    </>
+    </Container>
   )
 }
 export default TaskList

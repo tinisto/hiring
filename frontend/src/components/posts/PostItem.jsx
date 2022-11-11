@@ -41,25 +41,13 @@ const PostItem = ({ post, user }) => {
           },
         }}
       >
-        <CardHeader
-          avatar={
-            <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
-              {post.id}
-            </Avatar>
-          }
-          action={
-            <IconButton aria-label="settings">
-              {/* <MoreVertIcon /> */}
-            </IconButton>
-          }
-          title={`By ${post?.User?.firstName} ${post?.User?.lastName}`}
-          subheader={new Date(post.createdAt).toLocaleDateString("en-US")}
-        />
         <CardMedia
           component="img"
           height="194"
           image="https://images.unsplash.com/photo-1666556117061-8bc9fe639abc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
           alt="Paella dish"
+          onClick={() => navigate(`/posts/${post?.id}`)}
+          sx={{ cursor: "pointer" }}
         />
 
         <CardContent component={Link} to={`/posts/${post.id}`}>
@@ -71,47 +59,44 @@ const PostItem = ({ post, user }) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Box marginRight={"auto"}>
-            <Tooltip title="Views" arrow>
-              <IconButton>
-                <Visibility />
-                <Typography ml={1} variant="body2">
-                  {post.viewsCount}
-                </Typography>
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Comments" arrow>
-              <IconButton>
-                <ChatBubbleOutline />
-                <Typography ml={1} variant="body2">
-                  {post?.Comments?.length}
-                </Typography>
-              </IconButton>
-            </Tooltip>
-          </Box>
-          {user?.id === post?.User?.id ? (
-            <>
-              <Box marginLeft={"auto"}>
-                <Tooltip title="Edit" arrow>
-                  <IconButton
-                    color="warning"
-                    onClick={() => navigate(`/posts/edit/${post?.id}`)}
-                  >
-                    <Edit />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Delete" arrow>
-                  <IconButton
-                    color="error"
-                    onClick={() => dispatch(deletePost(post.id))}
-                  >
-                    <DeleteForever />
-                  </IconButton>
-                </Tooltip>
-              </Box>
-            </>
-          ) : (
-            <></>
+          {post?.Comments?.length > 0 && (
+            <Box marginRight={"auto"}>
+              <Tooltip title="Comments" arrow>
+                <IconButton onClick={() => navigate(`/posts/${post?.id}`)}>
+                  <ChatBubbleOutline />
+                  <Typography ml={1} variant="body2">
+                    {post?.Comments?.length === 0 ? (
+                      <></>
+                    ) : post?.Comments?.length === 1 ? (
+                      `${post?.Comments?.length} Comment`
+                    ) : (
+                      `${post?.Comments?.length} Comments`
+                    )}
+                  </Typography>
+                </IconButton>
+              </Tooltip>
+            </Box>
+          )}
+
+          {user?.id === post?.User?.id && (
+            <Box marginLeft={"auto"}>
+              <Tooltip title="Edit" arrow>
+                <IconButton
+                  color="warning"
+                  onClick={() => navigate(`/posts/edit/${post?.id}`)}
+                >
+                  <Edit />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Delete" arrow>
+                <IconButton
+                  color="error"
+                  onClick={() => dispatch(deletePost(post.id))}
+                >
+                  <DeleteForever />
+                </IconButton>
+              </Tooltip>
+            </Box>
           )}
         </CardActions>
       </Card>

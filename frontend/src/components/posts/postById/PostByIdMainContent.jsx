@@ -1,8 +1,11 @@
-import { Typography } from "@mui/material"
+import { Avatar, Stack, Typography } from "@mui/material"
 
 const PostByIdMainContent = ({ singlePost }) => {
   return (
     <>
+      <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
+        {singlePost?.User?.id}
+      </Avatar>
       <Typography variant="body2" color={"grey"}>
         By {singlePost?.User?.firstName} {singlePost?.User?.lastName}
         <br />

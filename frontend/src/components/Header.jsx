@@ -1,3 +1,4 @@
+import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt"
 import {
   AppBar,
   Avatar,
@@ -9,6 +10,7 @@ import {
   MenuItem,
   Tab,
   Tabs,
+  TextField,
   Toolbar,
   Tooltip,
   Typography,
@@ -81,9 +83,6 @@ function Header({ links }) {
             >
               Blog
             </Button>
-            {/* <Link to="/" style={{ color: "white" }}>
-              <FaceIcon />
-            </Link> */}
             <DrawerComp links={links} user={user} />
           </>
         ) : (
@@ -95,13 +94,16 @@ function Header({ links }) {
                 </Link> */}
 
                 <Button
-                  variant="contained"
-                  color="warning"
+                  variant="text"
+                  color="error"
                   size="small"
                   component={Link}
                   to="/"
                 >
-                  Blog
+                  <SentimentSatisfiedAltIcon color="error" />
+                  <Typography marginLeft={1} color="error" fontWeight={700}>
+                    Blog
+                  </Typography>
                 </Button>
               </Grid>
               <Grid item xs={3}>
@@ -175,25 +177,25 @@ function Header({ links }) {
                   ) : (
                     <>
                       <Button
+                        sx={{ marginLeft: "auto", borderRadius: 4 }}
+                        variant="outlined"
+                        component={Link}
+                        to="/register"
+                        size="small"
+                      >
+                        Sign Up
+                      </Button>
+                      <Button
                         sx={{
-                          marginLeft: "auto",
-                          background: "rgba(9,9,121,1)",
+                          marginLeft: 1,
+                          borderRadius: 4,
                         }}
                         variant="contained"
                         component={Link}
                         to="/login"
                         size="small"
                       >
-                        Login
-                      </Button>
-                      <Button
-                        sx={{ marginLeft: 1, background: "rgba(9,9,121,1)" }}
-                        variant="contained"
-                        component={Link}
-                        to="/register"
-                        size="small"
-                      >
-                        Register
+                        Log In
                       </Button>
                     </>
                   )}
