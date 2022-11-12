@@ -1,9 +1,7 @@
 import axios from "axios"
 const URL = "auth"
 
-// router.get("/me"
-
-// registerUser
+// registerUser _____________________________________________________________________________________
 const registerUser = async (userData) => {
   const response = await axios.post(URL + "/register", userData)
   if (response.data) {
@@ -12,21 +10,7 @@ const registerUser = async (userData) => {
   }
 }
 
-// updateUser
-const updateUser = async (userData) => {
-  const response = await axios.post(URL + "/update", userData)
-  if (response.data) {
-    localStorage.setItem("user", JSON.stringify(response.data))
-    return response.data
-  }
-}
-
-// logout User
-const logoutUser = () => {
-  localStorage.removeItem("user")
-}
-
-// login User
+// login User _____________________________________________________________________________________
 const loginUser = async (formData) => {
   const response = await axios.post(URL + "/login", formData)
   if (response.data) {
@@ -35,5 +19,19 @@ const loginUser = async (formData) => {
   }
 }
 
-const authService = { registerUser, logoutUser, loginUser, updateUser }
+// updateUser _____________________________________________________________________________________
+const updateUser = async (userData) => {
+  const response = await axios.post(URL + "/update", userData)
+  if (response.data) {
+    localStorage.setItem("user", JSON.stringify(response.data))
+    return response.data
+  }
+}
+
+// logout User _____________________________________________________________________________________
+const logoutUser = () => {
+  localStorage.removeItem("user")
+}
+
+const authService = { registerUser, loginUser, updateUser, logoutUser }
 export default authService

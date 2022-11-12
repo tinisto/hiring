@@ -1,10 +1,8 @@
 import PostItem from "./PostItem"
 import { useSelector, useDispatch } from "react-redux"
-import { getPosts, reset } from "../../features/posts/postSlice"
+import { getAllPosts } from "../../features/posts/postSlice"
 import React from "react"
-import { Box, Button, Container, Fab, Typography } from "@mui/material"
-import { Link } from "react-router-dom"
-import AddIcon from "@mui/icons-material/Add"
+import { Box, Container, Typography } from "@mui/material"
 
 const Diaries = () => {
   const { posts } = useSelector((state) => state.posts)
@@ -12,7 +10,7 @@ const Diaries = () => {
   const dispatch = useDispatch()
 
   React.useEffect(() => {
-    dispatch(getPosts())
+    dispatch(getAllPosts())
   }, [dispatch])
   return (
     <Container maxWidth="lg">

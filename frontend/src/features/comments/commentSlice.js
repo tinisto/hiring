@@ -10,7 +10,12 @@ const initialState = {
   commentsSlice_commentsAll: [],
 }
 
-// createComment
+// createComment,
+// getAllComments,
+// updateComment,
+// deleteComment,
+
+// createComment _____________________________________________________________________________________
 export const createComment = createAsyncThunk(
   "createComment",
   async (commentData, thunkAPI) => {
@@ -29,7 +34,25 @@ export const createComment = createAsyncThunk(
   }
 )
 
-// updateComment
+// getAllComments _____________________________________________________________________________________
+export const getAllComments = createAsyncThunk(
+  "getAllComments",
+  async (postId, thunkAPI) => {
+    try {
+      return await commentService.getAllComments(postId)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+// updateComment _____________________________________________________________________________________
 export const updateComment = createAsyncThunk(
   "updateComment",
   async (commentData, thunkAPI) => {
@@ -48,25 +71,7 @@ export const updateComment = createAsyncThunk(
   }
 )
 
-// getAllComments
-export const getAllComments = createAsyncThunk(
-  "getAllComments",
-  async (postId, thunkAPI) => {
-    try {
-      return await commentService.getAllComments(postId)
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString()
-      return thunkAPI.rejectWithValue(message)
-    }
-  }
-)
-
-// deleteComment
+// deleteComment _____________________________________________________________________________________
 export const deleteComment = createAsyncThunk(
   "deleteComment",
   async (commentData, thunkAPI) => {
@@ -93,7 +98,7 @@ const commentSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // createComment
+      // createComment _____________________________________________________________________________________
       .addCase(createComment.pending, (state) => {
         state.commentsSlice__isLoading = true
       })
@@ -110,7 +115,24 @@ const commentSlice = createSlice({
         state.commentsSlice_message = action.payload.message
         state.commentsSlice_commentSingle = []
       })
-      // updateComment
+
+      // getAllComments _____________________________________________________________________________________
+      .addCase(getAllComments.pending, (state) => {
+        state.commentsSlice_isLoading = true
+      })
+      .addCase(getAllComments.fulfilled, (state, action) => {
+        state.commentsSlice_isLoading = false
+        state.commentsSlice_isSuccess = true
+        state.commentsSlice_commentsAll = action.payload
+      })
+      .addCase(getAllComments.rejected, (state, action) => {
+        state.commentsSlice_isLoading = false
+        state.commentsSlice_isError = true
+        state.commentsSlice_message = action.payload
+        state.commentsSlice_commentsAll = []
+      })
+
+      // updateComment _____________________________________________________________________________________
       .addCase(updateComment.pending, (state) => {
         state.commentsSlice__isLoading = true
       })
@@ -126,22 +148,8 @@ const commentSlice = createSlice({
         state.commentsSlice_message = action.payload
         state.commentsSlice_commentSingle = []
       })
-      // getAllComments
-      .addCase(getAllComments.pending, (state) => {
-        state.commentsSlice_isLoading = true
-      })
-      .addCase(getAllComments.fulfilled, (state, action) => {
-        state.commentsSlice_isLoading = false
-        state.commentsSlice_isSuccess = true
-        state.commentsSlice_commentsAll = action.payload
-      })
-      .addCase(getAllComments.rejected, (state, action) => {
-        state.commentsSlice_isLoading = false
-        state.commentsSlice_isError = true
-        state.commentsSlice_message = action.payload
-        state.commentsSlice_commentsAll = []
-      })
-      // deleteComment
+
+      // deleteComment _____________________________________________________________________________________
       .addCase(deleteComment.pending, (state) => {
         state.isLoading = true
         state.commentsSlice_message = ""

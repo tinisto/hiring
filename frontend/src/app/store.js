@@ -3,6 +3,8 @@ import postReducer from "../features/posts/postSlice"
 import authReducer from "../features/auth/authSlice"
 import commentReducer from "../features/comments/commentSlice"
 import taskReducer from "../features/tasks/taskSlice"
+import newsReducer from "../features/news/newsSlice"
+import questionReducer from "../features/questions/questionSlice"
 
 export const store = configureStore({
   reducer: {
@@ -10,5 +12,7 @@ export const store = configureStore({
     posts: postReducer,
     comments: commentReducer,
     tasks: taskReducer,
+    news: newsReducer,
+    questions: questionReducer,
   },
 })

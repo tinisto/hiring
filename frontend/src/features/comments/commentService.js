@@ -1,7 +1,7 @@
 import axios from "axios"
 const URL = "post/:postId/comments"
 
-// create a comment
+// createComment _____________________________________________________________________________________
 const createComment = async (commentData, token) => {
   const { postId } = commentData
   const config = {
@@ -17,7 +17,13 @@ const createComment = async (commentData, token) => {
   return response.data
 }
 
-// update a comment
+// getAllComments _____________________________________________________________________________________
+const getAllComments = async (postId) => {
+  const response = await axios.get(`/posts/${postId}/comments`, postId)
+  return response.data
+}
+
+// updateComment _____________________________________________________________________________________
 const updateComment = async (commentData, token) => {
   const { postId, commentId } = commentData
   const config = {
@@ -33,13 +39,7 @@ const updateComment = async (commentData, token) => {
   return response.data
 }
 
-// get all comments
-const getAllComments = async (postId) => {
-  const response = await axios.get(`/posts/${postId}/comments`, postId)
-  return response.data
-}
-
-// delete comment
+// deleteComment _____________________________________________________________________________________
 const deleteComment = async (commentData, token) => {
   const { postId, id } = commentData
   const config = {
@@ -56,7 +56,7 @@ const deleteComment = async (commentData, token) => {
 const commentService = {
   createComment,
   getAllComments,
-  deleteComment,
   updateComment,
+  deleteComment,
 }
 export default commentService

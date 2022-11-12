@@ -1,6 +1,6 @@
 const { Task } = require("../models")
 
-// get all Task
+// getAllTasks _____________________________________________________________________________________
 const getAllTasks = async (req, res) => {
   try {
     const tasks = await Task.findAll({ order: [["createdAt", "DESC"]] })
@@ -10,7 +10,7 @@ const getAllTasks = async (req, res) => {
   }
 }
 
-// getTaskByID
+// getTaskByID _____________________________________________________________________________________
 const getTaskByID = async (req, res) => {
   try {
     const task = await Task.findByPk(req.params.id)
@@ -24,12 +24,10 @@ const getTaskByID = async (req, res) => {
   }
 }
 
-// editTask
+// editTask _____________________________________________________________________________________
 const editTask = async (req, res) => {
   try {
     const { id, name, completed } = req.body
-
-    console.log("req.body", req.body)
 
     await Task.update(
       req.body,
@@ -49,10 +47,9 @@ const editTask = async (req, res) => {
   }
 }
 
-// deleteTask
+// deleteTask _____________________________________________________________________________________
 const deleteTask = async (req, res) => {
   const { id } = req.params
-  console.log("id", id)
   try {
     const task = await Task.destroy({ where: { id } })
     if (!task) {
@@ -64,7 +61,7 @@ const deleteTask = async (req, res) => {
   }
 }
 
-// create a Task
+// create a Task _____________________________________________________________________________________
 const createTask = async (req, res) => {
   try {
     const { name, email } = req.body

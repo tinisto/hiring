@@ -1,8 +1,8 @@
 import axios from "axios"
-const URL = "/posts"
+const URL = "/questions"
 
-// createPost _____________________________________________________________________________________
-const createPost = async (formData, token) => {
+// createNews _____________________________________________________________________________________
+const createNews = async (formData, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -14,24 +14,24 @@ const createPost = async (formData, token) => {
   }
 }
 
-// getAllPosts _____________________________________________________________________________________
-const getAllPosts = async () => {
+// getAllNews _____________________________________________________________________________________
+const getAllNews = async () => {
   const response = await axios.get(URL)
   if (response.data) {
     return response.data
   }
 }
 
-// getOnePostById _____________________________________________________________________________________
-const getOnePostById = async (id) => {
+// getOneNewsById _____________________________________________________________________________________
+const getOneNewsById = async (id) => {
   const response = await axios.get(`${URL}/${id}`, id)
   if (response.data) {
     return response.data
   }
 }
 
-// editPost _____________________________________________________________________________________
-const editPost = async (formData, token) => {
+// editNews _____________________________________________________________________________________
+const editNews = async (formData, token) => {
   const { id } = formData
   const config = {
     headers: {
@@ -44,8 +44,8 @@ const editPost = async (formData, token) => {
   }
 }
 
-// delete Post _____________________________________________________________________________________
-const deletePost = async (id, token) => {
+// deleteNews _____________________________________________________________________________________
+const deleteNews = async (id, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -57,12 +57,12 @@ const deletePost = async (id, token) => {
   }
 }
 
-const postService = {
-  createPost,
-  getAllPosts,
-  getOnePostById,
-  editPost,
-  deletePost,
+const newsService = {
+  createNews,
+  getAllNews,
+  getOneNewsById,
+  editNews,
+  deleteNews,
 }
 
-export default postService
+export default newsService

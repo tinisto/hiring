@@ -69,15 +69,12 @@ const Profile = () => {
     setFirstNameAction(false)
     setLastNameAction(false)
     setEmailAction(false)
-    console.log("subittted")
-    console.log(userData)
     dispatch(updateUser(userData))
   }
   const onSubmitImage = (e) => {
     e.preventDefault()
     const formData = new FormData()
     formData.append("selectedImage", selectedImage)
-    console.log("selectedImage", selectedImage)
     dispatch(updateUser(selectedImage))
   }
 

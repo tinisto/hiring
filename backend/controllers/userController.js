@@ -5,7 +5,7 @@ const { validationResult } = require("express-validator")
 const uuid = require("uuid")
 const path = require("path")
 
-// registerUser
+// registerUser _____________________________________________________________________________________
 const registerUser = async (req, res) => {
   const { firstName, lastName, email, password } = req.body
 
@@ -44,7 +44,7 @@ const registerUser = async (req, res) => {
   }
 }
 
-// loginUser
+// loginUser _____________________________________________________________________________________
 const loginUser = async (req, res) => {
   const { email, password } = req.body
   try {
@@ -72,10 +72,9 @@ const loginUser = async (req, res) => {
   }
 }
 
-// update User
+// updateUser _____________________________________________________________________________________
 const updateUser = async (req, res) => {
   const { firstName, lastName, email } = req.body
-  console.log("req.file", req.file)
   if (!firstName || !lastName || !email) {
     return res.status(400).json({ message: "Please fill out all fields" })
   }
@@ -90,15 +89,8 @@ const updateUser = async (req, res) => {
         {
           firstName: firstName.charAt(0).toUpperCase() + firstName.slice(1),
           lastName: lastName.charAt(0).toUpperCase() + lastName.slice(1),
-
           email,
-          // userImage: req.file.userImage,
         },
-        // {
-        //   firstName,
-        //   lastName,
-        //   email,
-        // },
         { where: { email } }
       )
       const updateUser = await User.findOne({ where: { email } })
@@ -123,7 +115,7 @@ const updateUser = async (req, res) => {
   }
 }
 
-// getMe
+// getMe _____________________________________________________________________________________
 const getMe = async (req, res) => {
   try {
     const result = await User.findByPk(req.User.id, {

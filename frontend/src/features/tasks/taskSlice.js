@@ -9,7 +9,7 @@ const initialState = {
   message: "",
 }
 
-// createTask
+// createTask _____________________________________________________________________________________
 export const createTask = createAsyncThunk(
   "createTask",
   async (formData, thunkAPI) => {
@@ -27,7 +27,7 @@ export const createTask = createAsyncThunk(
   }
 )
 
-// getAllTasks
+// getAllTasks _____________________________________________________________________________________
 export const getAllTasks = createAsyncThunk(
   "getAllTasks",
   async (_, thunkAPI) => {
@@ -45,7 +45,7 @@ export const getAllTasks = createAsyncThunk(
   }
 )
 
-// getTaskByID
+// getTaskByID _____________________________________________________________________________________
 export const getTaskByID = createAsyncThunk(
   "getTaskByID",
   async (id, thunkAPI) => {
@@ -63,7 +63,7 @@ export const getTaskByID = createAsyncThunk(
   }
 )
 
-// editTask
+// editTask _____________________________________________________________________________________
 export const editTask = createAsyncThunk(
   "editTask",
   async (formData, thunkAPI) => {
@@ -81,7 +81,7 @@ export const editTask = createAsyncThunk(
   }
 )
 
-// deleteTask
+// deleteTask _____________________________________________________________________________________
 export const deleteTask = createAsyncThunk(
   "deleteTask",
   async (id, thunkAPI) => {
@@ -111,7 +111,8 @@ const taskSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // createTask
+
+      // createTask _____________________________________________________________________________________
       .addCase(createTask.pending, (state) => {
         state.isLoading = true
       })
@@ -127,7 +128,8 @@ const taskSlice = createSlice({
         state.message = action.payload
         state.tasks = []
       })
-      // getAllTasks
+
+      // getAllTasks _____________________________________________________________________________________
       .addCase(getAllTasks.pending, (state) => {
         state.isLoading = true
       })
@@ -142,7 +144,8 @@ const taskSlice = createSlice({
         state.message = action.payload
         state.tasks = []
       })
-      // getTaskByID
+
+      // getTaskByID _____________________________________________________________________________________
       .addCase(getTaskByID.pending, (state) => {
         state.isLoading = true
       })
@@ -157,7 +160,8 @@ const taskSlice = createSlice({
         state.message = action.payload
         state.tasks = []
       })
-      // editTask
+
+      // editTask _____________________________________________________________________________________
       .addCase(editTask.pending, (state) => {
         state.isLoading = true
       })
@@ -176,10 +180,6 @@ const taskSlice = createSlice({
           }
           return obj
         })
-        // state.tasks = state.tasks.map((item) => ({
-        //   ...item,
-        //   name: action.payload,
-        // }))
         state.message = "Task edited successfully"
       })
       .addCase(editTask.rejected, (state, action) => {
@@ -188,7 +188,8 @@ const taskSlice = createSlice({
         state.message = action.payload
         state.tasks = []
       })
-      // deleteTask
+
+      // deleteTask _____________________________________________________________________________________
       .addCase(deleteTask.pending, (state) => {
         state.isLoading = true
       })

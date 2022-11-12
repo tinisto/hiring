@@ -33,6 +33,8 @@ app.use("/upload", upload.single("file"), (req, res) => {
 app.use("/auth", require("./routes/userRouter.js"))
 app.use("/tasks", require("./routes/taskRoute.js"))
 app.use("/posts", require("./routes/postRouter.js"))
+app.use("/questions", require("./routes/questionRouter.js"))
+app.use("/news", require("./routes/newsRouter.js"))
 app.use("/posts/:postId/comments", require("./routes/commentRouter"))
 
 // Serve frontend

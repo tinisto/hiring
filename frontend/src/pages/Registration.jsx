@@ -44,7 +44,6 @@ const Registration = () => {
     ) {
       // dispatch(registerUser({ formData, data }))
       dispatch(registerUser(formData))
-      console.log("formData, data", formData, data)
       navigate("/")
     }
 
@@ -73,9 +72,7 @@ const Registration = () => {
     })
   }
   const onInputChange = (e) => {
-    console.log(e.target.files)
     setFile(e.target.files[0])
-    console.log("file", file)
   }
   return (
     <Box

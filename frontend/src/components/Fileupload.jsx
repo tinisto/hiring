@@ -6,16 +6,13 @@ import axios from "axios"
 const Fileupload = () => {
   const [file, setFile] = React.useState(null)
   const onInputChange = (e) => {
-    console.log(e.target.files)
     setFile(e.target.files[0])
-    console.log("file", file)
   }
   const onSubmit = async (e) => {
     e.preventDefault()
     const data = new FormData()
     data.append("file", file)
     await axios.post("/upload", data)
-    console.log("data", data)
   }
   return (
     <Box component="form" onSubmit={onSubmit}>

@@ -1,25 +1,25 @@
 import axios from "axios"
 const URL = "/tasks"
 
-// createTask
+// createTask _____________________________________________________________________________________
 const createTask = async (formData) => {
   const response = await axios.post(URL, formData)
   return response.data
 }
 
-// getAllTasks
+// getAllTasks _____________________________________________________________________________________
 const getAllTasks = async () => {
   const response = await axios.get(URL)
   return response.data
 }
 
-// getTaskByID
+// getTaskByID _____________________________________________________________________________________
 const getTaskByID = async (id) => {
   const response = await axios.get(`${URL}/${id}`)
   return response.data
 }
 
-// editTask
+// editTask _____________________________________________________________________________________
 const editTask = async (formData) => {
   const { id, name, completed } = formData
 

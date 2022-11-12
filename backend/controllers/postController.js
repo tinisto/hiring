@@ -2,7 +2,7 @@ const { User, Post, Comment } = require("../models")
 const { validationResult } = require("express-validator")
 const e = require("express")
 
-// create post
+// createPost _____________________________________________________________________________________
 const createPost = async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
@@ -20,7 +20,7 @@ const createPost = async (req, res) => {
   res.status(200).json(result)
 }
 
-// get All Posts
+// getAllPost _____________________________________________________________________________________
 const getAllPost = async (req, res) => {
   try {
     result = await Post.findAll({
@@ -35,7 +35,7 @@ const getAllPost = async (req, res) => {
   }
 }
 
-// get One Post
+// getOnePost _____________________________________________________________________________________
 const getOnePost = async (req, res) => {
   try {
     result = await Post.findByPk(req.params.id, { include: User })
@@ -51,7 +51,7 @@ const getOnePost = async (req, res) => {
   }
 }
 
-// removePost
+// removePost _____________________________________________________________________________________
 const removePost = async (req, res) => {
   const { id } = req.params
   try {
@@ -75,7 +75,7 @@ const removePost = async (req, res) => {
   }
 }
 
-// editPost
+// editPost _____________________________________________________________________________________
 const editPost = async (req, res) => {
   const { title, text } = req.body
   try {

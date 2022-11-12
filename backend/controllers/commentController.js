@@ -1,7 +1,7 @@
 const { Post, User, Comment } = require("../models")
 const expressAsyncHandler = require("express-async-handler")
 
-// create comment
+// createComment _____________________________________________________________________________________
 const createComment = async (req, res) => {
   const { commentText, postId } = req.body
   const UserId = req.User.id
@@ -23,10 +23,9 @@ const createComment = async (req, res) => {
   }
 }
 
-// get all comments
+// getAllComments _____________________________________________________________________________________
 const getAllComments = async (req, res) => {
   const postId = req.baseUrl.split("/")[2]
-  console.log("postId", postId)
   try {
     const comment = await Comment.findAll({
       where: { PostId: postId },
@@ -39,7 +38,7 @@ const getAllComments = async (req, res) => {
   }
 }
 
-// get comment by id
+// getCommentById _____________________________________________________________________________________
 const getCommentById = async (req, res) => {
   const { id } = req.params
   try {
@@ -54,10 +53,9 @@ const getCommentById = async (req, res) => {
   }
 }
 
-// edit comment
+// editComment _____________________________________________________________________________________
 const editComment = async (req, res) => {
   const { commentText, commentId } = req.body
-  console.log("req.body", req.body)
 
   try {
     const candidate = await Comment.findByPk(commentId)
@@ -75,7 +73,7 @@ const editComment = async (req, res) => {
   }
 }
 
-// delete comment
+// deleteComment _____________________________________________________________________________________
 const deleteComment = async (req, res) => {
   const { id } = req.params
   const UserId = req.User.id

@@ -10,7 +10,9 @@ const initialState = {
   message: "",
 }
 
-// registerUser
+// registerUser, loginUser, updateUser, logoutUser
+
+// registerUser _____________________________________________________________________________________
 export const registerUser = createAsyncThunk(
   "registerUser",
   async (userData, thunkAPI) => {
@@ -28,7 +30,25 @@ export const registerUser = createAsyncThunk(
   }
 )
 
-// updateUser
+// loginUser _____________________________________________________________________________________
+export const loginUser = createAsyncThunk(
+  "loginUser",
+  async (formData, thunkAPI) => {
+    try {
+      return await authService.loginUser(formData)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+// updateUser _____________________________________________________________________________________
 export const updateUser = createAsyncThunk(
   "updateUser",
   async (userData, thunkAPI) => {
@@ -46,30 +66,12 @@ export const updateUser = createAsyncThunk(
   }
 )
 
-// logoutUser
+// logoutUser _____________________________________________________________________________________
 export const logoutUser = createAsyncThunk(
   "logoutUser",
   async (_, thunkAPI) => {
     try {
       return await authService.logoutUser()
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString()
-      return thunkAPI.rejectWithValue(message)
-    }
-  }
-)
-
-// loginUser
-export const loginUser = createAsyncThunk(
-  "loginUser",
-  async (formData, thunkAPI) => {
-    try {
-      return await authService.loginUser(formData)
     } catch (error) {
       const message =
         (error.response &&
@@ -90,7 +92,8 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      //registerUser
+
+      //registerUser _____________________________________________________________________________________
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true
       })
@@ -105,23 +108,8 @@ const authSlice = createSlice({
         state.message = action.payload
         state.user = null
       })
-      //updateUser
-      .addCase(updateUser.pending, (state) => {
-        state.isLoading = true
-      })
-      .addCase(updateUser.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.isSuccess = true
-        state.user = action.payload
-        console.log("action.payload", action.payload)
-      })
-      .addCase(updateUser.rejected, (state, action) => {
-        state.isLoading = false
-        state.isError = true
-        state.message = action.payload
-        state.user = null
-      })
-      //loginUser
+
+      //loginUser _____________________________________________________________________________________
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true
       })
@@ -136,7 +124,24 @@ const authSlice = createSlice({
         state.message = action.payload
         state.user = null
       })
-      //logoutUser
+
+      //updateUser _____________________________________________________________________________________
+      .addCase(updateUser.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.user = action.payload
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+        state.user = null
+      })
+
+      //logoutUser _____________________________________________________________________________________
       .addCase(logoutUser.fulfilled, (state, action) => {
         state.user = null
       })
