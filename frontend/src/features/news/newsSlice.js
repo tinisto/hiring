@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import newsService from "./newsService"
 
 const initialState = {
-  news: [],
+  allNews: [],
   singleNews: [],
   isSuccess: false,
   isError: false,
@@ -19,9 +19,10 @@ const initialState = {
 // createNews _____________________________________________________________________________________ createNews
 export const createNews = createAsyncThunk(
   "createNews",
-  async (_, thunkAPI) => {
+  async (formData, thunkAPI) => {
     try {
-      return await newsService.createNews()
+      const token = thunkAPI.getState().auth.user.token
+      return await newsService.createNews(formData, token)
     } catch (error) {
       const message =
         (error.response &&
@@ -124,13 +125,13 @@ const newsSlice = createSlice({
       .addCase(createNews.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.news = action.payload
+        state.allNews = action.payload
       })
       .addCase(createNews.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
-        state.news = []
+        state.allNews = []
       })
 
       // getAllNews _____________________________________________________________________________________
@@ -140,13 +141,13 @@ const newsSlice = createSlice({
       .addCase(getAllNews.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.news = action.payload
+        state.allNews = action.payload
       })
       .addCase(getAllNews.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
-        state.news = []
+        state.allNews = []
       })
 
       // getOneNewsById _____________________________________________________________________________________
@@ -188,7 +189,9 @@ const newsSlice = createSlice({
       .addCase(deleteNews.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.news = state.news.filter((item) => item.id !== +action.payload.id)
+        state.allNews = state.allNews.filter(
+          (item) => item.id !== +action.payload.id
+        )
         state.singleNews = []
         state.message = action.payload.message
       })
@@ -196,7 +199,7 @@ const newsSlice = createSlice({
         state.isLoading = false
         state.isError = true
         state.message = action.payload
-        state.news = []
+        state.allNews = []
       })
   },
 })

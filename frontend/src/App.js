@@ -1,7 +1,12 @@
 import { Home, Login, Registration } from "./pages"
 import { Posts, PostEdit, PostAdd, PostById } from "./components/posts"
-import { NewsAll } from "./components/news"
-import { QuestionsAll } from "./components/questions"
+import { NewsAll, NewsById, NewsEdit, NewsAdd } from "./components/news"
+import {
+  QuestionAll,
+  QuestionById,
+  QuestionEdit,
+  QuestionAdd,
+} from "./components/questions"
 
 import TaskList from "./components/tasks/TaskList.jsx"
 import { Routes, Route } from "react-router-dom"
@@ -25,7 +30,13 @@ function App() {
           <Route path="/posts/add" element={<PostAdd />} />
           <Route path="/tasks" element={<TaskList />} />
           <Route path="/news" element={<NewsAll />} />
-          <Route path="/questions" element={<QuestionsAll />} />
+          <Route path="/news/:id" element={<NewsById />} />
+          <Route path="/news/edit/:id" element={<NewsEdit />} />
+          <Route path="/news/add" element={<NewsAdd />} />
+          <Route path="/questions" element={<QuestionAll />} />
+          <Route path="/questions/:id" element={<QuestionById />} />
+          <Route path="/questions/edit/:id" element={<QuestionEdit />} />
+          <Route path="/questions/add" element={<QuestionAdd />} />
         </Route>
       </Routes>
     </>

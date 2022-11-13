@@ -1,30 +1,34 @@
-import NewsItem from "./NewsItem"
+import QuestionItem from "./QuestionItem"
 import { useSelector, useDispatch } from "react-redux"
-import { getAllNews } from "../../features/news/newsSlice"
+import { getAllQuestion } from "../../features/questions/questionSlice"
 import React from "react"
 import { Box, Container, Typography } from "@mui/material"
 
-const NewsAll = () => {
-  const { allNews } = useSelector((state) => state.news)
+const QuestionAll = () => {
+  const { allQuestions } = useSelector((state) => state.questions)
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
 
   React.useEffect(() => {
-    dispatch(getAllNews())
+    dispatch(getAllQuestion())
   }, [dispatch])
   return (
     <Container maxWidth="lg">
-      {allNews.length ? (
+      {allQuestions.length ? (
         <Box>
-          {allNews.map((oneNews) => (
-            <NewsItem key={oneNews.id} oneNews={oneNews} user={user} />
+          {allQuestions.map((oneQuestion) => (
+            <QuestionItem
+              key={oneQuestion.id}
+              oneQuestion={oneQuestion}
+              user={user}
+            />
           ))}
         </Box>
       ) : (
         <>
           <Box>
             <Typography marginTop={3} textAlign={"center"} variant="h6">
-              No News yet
+              No questions yet
             </Typography>
           </Box>
         </>
@@ -32,4 +36,4 @@ const NewsAll = () => {
     </Container>
   )
 }
-export default NewsAll
+export default QuestionAll

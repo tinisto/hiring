@@ -5,7 +5,7 @@ const e = require("express")
 // create News
 const createNews = async (req, res) => {
   const { titleNews, textNews } = req.body
-  const result = await Post.create({
+  const result = await News.create({
     titleNews,
     textNews,
     UserId: req.User.id,
@@ -83,7 +83,7 @@ const editNews = async (req, res) => {
     }
     result = await News.findByPk(req.params.id)
     if (!result) {
-      return res.status(400).json({ message: "Can't get a post" })
+      return res.status(400).json({ message: "Can't get a News" })
     }
 
     if (result.UserId === req.User.id) {

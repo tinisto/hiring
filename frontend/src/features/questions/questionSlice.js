@@ -8,12 +8,12 @@ import questionService from "./questionService"
 // deleteQuestion,
 
 const initialState = {
-  questions: [],
+  allQuestions: [],
   singleQuestion: [],
-  isSuccess: false,
-  isError: false,
-  isLoading: false,
-  message: "",
+  isLoadingQuestion: false,
+  isSuccessQuestion: false,
+  isErrorQuestion: false,
+  messageQuestion: "",
 }
 
 // createQuestion _____________________________________________________________________________________
@@ -120,85 +120,85 @@ const questionSlice = createSlice({
 
       // createQuestion _____________________________________________________________________________________
       .addCase(createQuestion.pending, (state) => {
-        state.isLoading = true
+        state.isLoadingQuestion = true
       })
       .addCase(createQuestion.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.isSuccess = true
-        state.questions.unshift(action.payload)
+        state.isLoadingQuestion = false
+        state.isSuccessQuestion = true
+        state.allQuestions.unshift(action.payload)
       })
       .addCase(createQuestion.rejected, (state, action) => {
-        state.isLoading = false
-        state.isError = true
-        state.message = action.payload
-        state.questions = []
+        state.isLoadingQuestion = false
+        state.isErrorQuestion = true
+        state.messageQuestion = action.payload
+        state.allQuestions = []
       })
       // getAllQuestion _____________________________________________________________________________________
       .addCase(getAllQuestion.pending, (state) => {
-        state.isLoading = true
+        state.isLoadingQuestion = true
       })
       .addCase(getAllQuestion.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.isSuccess = true
-        state.questions = action.payload
+        state.isLoadingQuestion = false
+        state.isSuccessQuestion = true
+        state.allQuestions = action.payload
       })
       .addCase(getAllQuestion.rejected, (state, action) => {
-        state.isLoading = false
-        state.isError = true
-        state.message = action.payload
-        state.questions = []
+        state.isLoadingQuestion = false
+        state.isErrorQuestion = true
+        state.messageQuestion = action.payload
+        state.allQuestions = []
       })
 
       // getOneQuestionById _____________________________________________________________________________________
       .addCase(getOneQuestionById.pending, (state) => {
-        state.isLoading = true
+        state.isLoadingQuestion = true
       })
       .addCase(getOneQuestionById.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.isSuccess = true
+        state.isLoadingQuestion = false
+        state.isSuccessQuestion = true
         state.singleQuestion = action.payload
       })
       .addCase(getOneQuestionById.rejected, (state, action) => {
-        state.isLoading = false
-        state.isError = true
-        state.message = action.payload
+        state.isLoadingQuestion = false
+        state.isErrorQuestion = true
+        state.messageQuestion = action.payload
         state.singleQuestion = []
       })
 
       // editQuestion _____________________________________________________________________________________
       .addCase(editQuestion.pending, (state) => {
-        state.isLoading = true
+        state.isLoadingQuestion = true
       })
       .addCase(editQuestion.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.isSuccess = true
+        state.isLoadingQuestion = false
+        state.isSuccessQuestion = true
         state.singleQuestion = action.payload
       })
       .addCase(editQuestion.rejected, (state, action) => {
-        state.isLoading = false
-        state.isError = true
-        state.message = action.payload
+        state.isLoadingQuestion = false
+        state.isErrorQuestion = true
+        state.messageQuestion = action.payload
         state.singleQuestion = []
       })
 
       // deleteQuestion _____________________________________________________________________________________
       .addCase(deleteQuestion.pending, (state) => {
-        state.isLoading = true
+        state.isLoadingQuestion = true
       })
       .addCase(deleteQuestion.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.isSuccess = true
-        state.questions = state.questions.filter(
+        state.isLoadingQuestion = false
+        state.isSuccessQuestion = true
+        state.allQuestions = state.allQuestions.filter(
           (item) => item.id !== +action.payload.id
         )
         state.singleQuestion = []
-        state.message = action.payload.message
+        state.messageQuestion = action.payload.messageQuestion
       })
       .addCase(deleteQuestion.rejected, (state, action) => {
-        state.isLoading = false
-        state.isError = true
-        state.message = action.payload
-        state.questions = []
+        state.isLoadingQuestion = false
+        state.isErrorQuestion = true
+        state.messageQuestion = action.payload
+        state.allQuestions = []
       })
   },
 })

@@ -1,5 +1,5 @@
 import axios from "axios"
-const URL = "/questions"
+const URL = "/news"
 
 // createNews _____________________________________________________________________________________
 const createNews = async (formData, token) => {
