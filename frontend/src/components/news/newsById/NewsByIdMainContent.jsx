@@ -12,10 +12,10 @@ const NewsByIdMainContent = ({ singleNews }) => {
         Published: {new Date(singleNews?.createdAt).toLocaleString()}
       </Typography>
       <Typography component="h1" variant="h3">
-        {singleNews?.titleNews}
+        {singleNews?.title}
       </Typography>
       <Typography variant="h5" color="inherit" paragraph>
-        {singleNews?.textNews}
+        {singleNews?.text}
       </Typography>
     </>
   )

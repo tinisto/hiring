@@ -13,11 +13,12 @@ import { useNavigate } from "react-router-dom"
 import { deleteNews } from "../../features/news/newsSlice"
 import { useDispatch } from "react-redux"
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 const NewsItem = ({ oneNews, user }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const location = useLocation()
 
   return (
     <>
@@ -34,12 +35,19 @@ const NewsItem = ({ oneNews, user }) => {
           },
         }}
       >
+        {location.pathname === "/" && (
+          <CardContent>
+            <Typography variant="caption" component={Link} to="/news">
+              News
+            </Typography>
+          </CardContent>
+        )}
         <CardContent component={Link} to={`/news/${oneNews.id}`}>
           <Typography variant="h6" color="text.secondary">
-            {oneNews.titleNews}
+            {oneNews.title}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {oneNews.textNews}
+            {oneNews.text}
           </Typography>
         </CardContent>
         <CardActions>

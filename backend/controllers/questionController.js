@@ -1,27 +1,29 @@
-const { User, Question } = require("../models")
+const { User, Question, Article } = require("../models")
 const { validationResult } = require("express-validator")
-const e = require("express")
+const CategoryId = 3
 
 // createQuestion _____________________________________________________________________________________
 const createQuestion = async (req, res) => {
-  //   const errors = validationResult(req)
-  //   if (!errors.isEmpty()) {
-  //     return res.status(400).json(errors.array())
-  //   }
+  const { title = "question", text } = req.body
+  try {
+    const result = await Article.create({
+      title,
+      text,
+      CategoryId,
+      UserId: req.User.id,
+    })
 
-  const { textQuestion } = req.body
-  const result = await Question.create({
-    textQuestion,
-    UserId: req.User.id,
-  })
-
-  res.status(200).json(result)
+    res.status(200).json({ result, message: "Question added" })
+  } catch (error) {
+    return res.status(500).json({ message: "Something went wrong" })
+  }
 }
 
 // getAllQuestion _____________________________________________________________________________________
 const getAllQuestion = async (req, res) => {
   try {
-    result = await Question.findAll({
+    result = await Article.findAll({
+      where: { CategoryId },
       order: [["createdAt", "DESC"]],
       include: User,
     })
@@ -35,11 +37,11 @@ const getAllQuestion = async (req, res) => {
 // getOneQuestion _____________________________________________________________________________________
 const getOneQuestion = async (req, res) => {
   try {
-    result = await Question.findByPk(req.params.id, { include: User })
+    result = await Article.findByPk(req.params.id, { include: User })
     if (!result) {
       return res.status(400).json({ message: "Can't get a Question" })
     }
-    const incrementResult = await result.increment("viewCountQuestion", {
+    const incrementResult = await result.increment("viewCount", {
       by: 1,
     })
     await result.reload()
@@ -57,13 +59,13 @@ const removeQuestion = async (req, res) => {
     if (!req.User) {
       return res.status(401).json({ message: "User not found" })
     }
-    result = await Question.findByPk(req.params.id)
+    result = await Article.findByPk(req.params.id)
     if (!result) {
       return res.status(400).json({ message: "Can't get a Question" })
     }
 
     if (result.UserId === req.User.id) {
-      await Question.destroy({ where: { id: req.params.id } })
+      await Article.destroy({ where: { id: req.params.id } })
       res.status(200).json({ id, message: "Question deleted" })
     } else {
       res.status(401).json({ message: "Not authorized" })
@@ -76,9 +78,9 @@ const removeQuestion = async (req, res) => {
 
 // editQuestion _____________________________________________________________________________________
 const editQuestion = async (req, res) => {
-  const { textQuestion } = req.body
+  const { text } = req.body
   try {
-    if (!textQuestion) {
+    if (!text) {
       return res
         .status(400)
         .json({ message: "Please enter all requirement fields" })
@@ -86,14 +88,19 @@ const editQuestion = async (req, res) => {
     if (!req.User) {
       return res.status(401).json({ message: "User not found" })
     }
-    result = await Question.findByPk(req.params.id)
+    result = await Article.findByPk(req.params.id)
     if (!result) {
       return res.status(400).json({ message: "Can't get a Question" })
     }
 
     if (result.UserId === req.User.id) {
-      await Question.update({ textQuestion }, { where: { id: req.params.id } })
-      res.status(200).json({ message: "Question was edited successfully" })
+      const result = await Article.update(
+        { text },
+        { where: { id: req.params.id } }
+      )
+      res
+        .status(200)
+        .json({ result, message: "Question was edited successfully" })
     } else {
       res.status(401).json({ message: "Not authorized" })
     }

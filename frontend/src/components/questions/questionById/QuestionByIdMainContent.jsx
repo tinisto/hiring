@@ -13,7 +13,7 @@ const QuestionByIdMainContent = ({ singleQuestion }) => {
       </Typography>
 
       <Typography variant="h5" color="inherit" paragraph>
-        {singleQuestion?.textQuestion}
+        {singleQuestion?.text}
       </Typography>
     </>
   )

@@ -11,10 +11,12 @@ const {
   editPost,
   removePost,
 } = require("../controllers/postController.js")
-router.post("/", protect, postCreateValidation, checkErrors, createPost)
+// router.post("/", protect, postCreateValidation, checkErrors, createPost)
+router.post("/", protect, createPost)
 router.get("/", getAllPost)
 router.get("/:id", getOnePost)
-router.put("/:id", protect, postCreateValidation, checkErrors, editPost)
+// router.put("/:id", protect, postCreateValidation, checkErrors, editPost)
+router.put("/:id", protect, editPost)
 router.delete("/:id", protect, removePost)
 
 module.exports = router

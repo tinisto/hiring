@@ -73,7 +73,7 @@ const Navbar = () => {
 
   return (
     <>
-      <AppBar position="sticky" color="inherit">
+      <AppBar position="static" color="inherit">
         <StyledToolbar>
           <SentimentSatisfiedAltIcon
             sx={{ display: { xs: "block", sm: "none" } }}

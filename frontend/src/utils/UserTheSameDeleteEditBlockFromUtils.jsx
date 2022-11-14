@@ -1,16 +1,19 @@
 import { Box, IconButton, Tooltip } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 import { Edit, DeleteForever } from "@mui/icons-material/"
+import { useLocation } from "react-router-dom"
 
-const QuestionByIdIfUserTheSameDeleteEditBlock = ({ handleDelete, id }) => {
+const UserTheSameDeleteEditBlockFromUtils = ({ handleDelete, id }) => {
   const navigate = useNavigate()
+  const location = useLocation()
+  const shortCutURL = location.pathname.split("/")[1]
 
   return (
     <Box marginLeft={"auto"}>
       <Tooltip title="Edit" arrow>
         <IconButton
           color="warning"
-          onClick={() => navigate(`/questions/edit/${id}`)}
+          onClick={() => navigate(`/${shortCutURL}/edit/${id}`)}
         >
           <Edit />
         </IconButton>
@@ -23,4 +26,4 @@ const QuestionByIdIfUserTheSameDeleteEditBlock = ({ handleDelete, id }) => {
     </Box>
   )
 }
-export default QuestionByIdIfUserTheSameDeleteEditBlock
+export default UserTheSameDeleteEditBlockFromUtils

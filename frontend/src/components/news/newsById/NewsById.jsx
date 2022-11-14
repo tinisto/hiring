@@ -1,31 +1,23 @@
-import {
-  Box,
-  Typography,
-  Container,
-  Paper,
-  IconButton,
-  Tooltip,
-  Button,
-  Divider,
-  Stack,
-} from "@mui/material"
+import { Box, Container, Paper } from "@mui/material"
 import React from "react"
 import { getOneNewsById, deleteNews } from "../../../features/news/newsSlice"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import CommentCreate from "../../comments/CommentCreate"
 import CommentsGetAll from "../../comments/CommentsGetAll"
-import NewsByIdViewsCommentCountBlock from "./NewsByIdViewsCommentCountBlock"
-import NewsByIdOpenCommentForm from "./NewsByIdOpenCommentForm"
-import NewsByIdIfUserTheSameDeleteEditBlock from "./NewsByIdIfUserTheSameDeleteEditBlock"
 import NewsByIdMainContent from "./NewsByIdMainContent"
+import SnackbarFromUtils from "../../../utils/SnackbarFromUtils"
+import OpenCommentFormFromUtils from "../../../utils/OpenCommentFormFromUtils"
+import UserTheSameDeleteEditBlockFromUtils from "../../../utils/UserTheSameDeleteEditBlockFromUtils"
+import ViewsCommentCountBlock from "../../../utils/ViewCountBlockFromUtils"
+
 const { getAllComments } = require("../../../features/comments/commentSlice.js")
 
 const NewsById = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { isLoading, allNews, singleNews } = useSelector((state) => state.news)
+  const { isLoading, singleNews, message } = useSelector((state) => state.news)
   const [openCommentBox, setOpenCommentBox] = React.useState(false)
 
   const {
@@ -48,6 +40,17 @@ const NewsById = () => {
     navigate("/news")
   }
 
+  // snackbar
+  React.useEffect(() => {
+    if (message) {
+      setOpenSnackbar(true)
+    }
+  }, [message])
+  const [openSnackbar, setOpenSnackbar] = React.useState(false)
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false)
+  }
+
   return (
     <>
       {isLoading ? (
@@ -58,17 +61,15 @@ const NewsById = () => {
             <Paper sx={{ mt: 5, padding: 3 }}>
               <NewsByIdMainContent singleNews={singleNews} />
               <Box display={"flex"}>
-                <NewsByIdViewsCommentCountBlock
-                  singleNews={singleNews}
-                  commentsSlice_commentsAll={commentsSlice_commentsAll}
-                />
-                <NewsByIdOpenCommentForm
+                <ViewsCommentCountBlock singleNews={singleNews} />
+
+                <OpenCommentFormFromUtils
                   setOpenCommentBox={setOpenCommentBox}
                   openCommentBox={openCommentBox}
                 />
 
                 {user?.id === singleNews?.User?.id && (
-                  <NewsByIdIfUserTheSameDeleteEditBlock
+                  <UserTheSameDeleteEditBlockFromUtils
                     handleDelete={handleDelete}
                     id={id}
                   />
@@ -88,6 +89,11 @@ const NewsById = () => {
           </Container>
         </>
       )}
+      <SnackbarFromUtils
+        openSnackbar={openSnackbar}
+        handleCloseSnackbar={handleCloseSnackbar}
+        message={message}
+      />
     </>
   )
 }

@@ -11,10 +11,10 @@ const DiaryEdit = () => {
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.auth)
   const [formData, setFormdata] = React.useState({
-    titleNews: "",
-    textNews: "",
+    title: "",
+    text: "",
   })
-  const { titleNews, textNews } = formData
+  const { title, text } = formData
   const onSubmit = async (e) => {
     e.preventDefault()
     await dispatch(editNews(formData))
@@ -53,8 +53,8 @@ const DiaryEdit = () => {
         variant="outlined"
         label="Title"
         type="text"
-        name="titleNews"
-        value={titleNews}
+        name="title"
+        value={title}
         onChange={onChange}
       />
       <TextField
@@ -63,8 +63,8 @@ const DiaryEdit = () => {
         variant="outlined"
         label="Text"
         type="text"
-        name="textNews"
-        value={textNews}
+        name="text"
+        value={text}
         onChange={onChange}
         multiline
       />

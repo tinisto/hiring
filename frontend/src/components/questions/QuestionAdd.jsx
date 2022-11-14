@@ -14,9 +14,9 @@ const QuestionAdd = () => {
   )
 
   const [formData, setFormdata] = React.useState({
-    textQuestion: "",
+    text: "",
   })
-  const { textQuestion } = formData
+  const { text } = formData
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -60,8 +60,8 @@ const QuestionAdd = () => {
         variant="outlined"
         label="Text"
         type="text"
-        name="textQuestion"
-        value={textQuestion}
+        name="text"
+        value={text}
         onChange={onChange}
         multiline
       />

@@ -1,7 +1,7 @@
 import { ChatBubbleOutline } from "@mui/icons-material"
 import { IconButton, Stack, Tooltip, Typography } from "@mui/material"
 
-const PostByIdOpenCommentForm = ({ setOpenCommentBox, openCommentBox }) => {
+const OpenCommentFormFromUtils = ({ setOpenCommentBox, openCommentBox }) => {
   return (
     <Stack direction="row" justifyContent="center" alignItems="flex-start">
       <>
@@ -17,4 +17,4 @@ const PostByIdOpenCommentForm = ({ setOpenCommentBox, openCommentBox }) => {
     </Stack>
   )
 }
-export default PostByIdOpenCommentForm
+export default OpenCommentFormFromUtils

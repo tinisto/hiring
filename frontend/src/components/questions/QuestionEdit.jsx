@@ -14,9 +14,9 @@ const QuestionEdit = () => {
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.auth)
   const [formData, setFormdata] = React.useState({
-    textQuestion: "",
+    text: "",
   })
-  const { textQuestion } = formData
+  const { text } = formData
   const onSubmit = async (e) => {
     e.preventDefault()
     await dispatch(editQuestion(formData))
@@ -48,7 +48,7 @@ const QuestionEdit = () => {
       marginTop={3}
       alignItems="center"
     >
-      <Typography variant="h5">Edit your news</Typography>
+      <Typography variant="h5">Edit your question</Typography>
 
       <TextField
         fullWidth
@@ -56,8 +56,8 @@ const QuestionEdit = () => {
         variant="outlined"
         label="Text"
         type="text"
-        name="textQuestion"
-        value={textQuestion}
+        name="text"
+        value={text}
         onChange={onChange}
         multiline
       />

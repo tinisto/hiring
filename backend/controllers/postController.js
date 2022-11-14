@@ -1,6 +1,6 @@
-const { User, Post, Comment } = require("../models")
+const { User, Post, Comment, Article } = require("../models")
 const { validationResult } = require("express-validator")
-const e = require("express")
+const CategoryId = 1
 
 // createPost _____________________________________________________________________________________
 const createPost = async (req, res) => {
@@ -8,29 +8,31 @@ const createPost = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json(errors.array())
   }
-
-  const { title, text, tags } = req.body
-  const result = await Post.create({
-    title,
-    text,
-    tags,
-    UserId: req.User.id,
-  })
-
-  res.status(200).json(result)
+  const { title, text } = req.body
+  try {
+    const result = await Article.create({
+      title,
+      text,
+      CategoryId,
+      UserId: req.User.id,
+    })
+    res.status(200).json({ result, message: "Post create" })
+  } catch (error) {
+    return res.status(500).json({ message: "Something went wrong" })
+  }
 }
 
 // getAllPost _____________________________________________________________________________________
 const getAllPost = async (req, res) => {
   try {
-    result = await Post.findAll({
+    result = await Article.findAll({
+      where: { CategoryId },
       order: [["createdAt", "DESC"]],
       include: [User, Comment],
       // include: User,
     })
     res.status(200).json(result)
   } catch (error) {
-    console.log(error)
     return res.status(500).json({ message: "Something went wrong" })
   }
 }
@@ -38,11 +40,11 @@ const getAllPost = async (req, res) => {
 // getOnePost _____________________________________________________________________________________
 const getOnePost = async (req, res) => {
   try {
-    result = await Post.findByPk(req.params.id, { include: User })
+    result = await Article.findByPk(req.params.id, { include: User })
     if (!result) {
       return res.status(400).json({ message: "Can't get a post" })
     }
-    const incrementResult = await result.increment("viewsCount", { by: 1 })
+    const incrementResult = await result.increment("viewCount", { by: 1 })
     await result.reload()
     res.status(200).json(result)
   } catch (error) {
@@ -58,13 +60,13 @@ const removePost = async (req, res) => {
     if (!req.User) {
       return res.status(401).json({ message: "User not found" })
     }
-    result = await Post.findByPk(req.params.id)
+    result = await Article.findByPk(req.params.id)
     if (!result) {
       return res.status(400).json({ message: "Can't get a post" })
     }
 
     if (result.UserId === req.User.id) {
-      await Post.destroy({ where: { id: req.params.id } })
+      await Article.destroy({ where: { id: req.params.id } })
       res.status(200).json({ id, message: "Post deleted" })
     } else {
       res.status(401).json({ message: "Not authorized" })
@@ -87,14 +89,17 @@ const editPost = async (req, res) => {
     if (!req.User) {
       return res.status(401).json({ message: "User not found" })
     }
-    result = await Post.findByPk(req.params.id)
+    result = await Article.findByPk(req.params.id)
     if (!result) {
       return res.status(400).json({ message: "Can't get a post" })
     }
 
     if (result.UserId === req.User.id) {
-      await Post.update({ title, text }, { where: { id: req.params.id } })
-      res.status(200).json({ message: "Post was edited successfully" })
+      const result = await Article.update(
+        { title, text },
+        { where: { id: req.params.id } }
+      )
+      res.status(200).json({ result, message: "Post was edited successfully" })
     } else {
       res.status(401).json({ message: "Not authorized" })
     }

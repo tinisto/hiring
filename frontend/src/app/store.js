@@ -5,6 +5,7 @@ import commentReducer from "../features/comments/commentSlice"
 import taskReducer from "../features/tasks/taskSlice"
 import newsReducer from "../features/news/newsSlice"
 import questionReducer from "../features/questions/questionSlice"
+import articleReducer from "../features/articles/articleSlice"
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     tasks: taskReducer,
     news: newsReducer,
     questions: questionReducer,
+    articleStore: articleReducer,
   },
 })

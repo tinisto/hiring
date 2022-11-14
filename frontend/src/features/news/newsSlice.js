@@ -1,20 +1,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import newsService from "./newsService"
 
-const initialState = {
-  allNews: [],
-  singleNews: [],
-  isSuccess: false,
-  isError: false,
-  isLoading: false,
-  message: "",
-}
-
 // createNews,
 // getAllNews,
 // getOneNewsById,
 // editNews,
 // deleteNews,
+
+const initialState = {
+  allNews: [],
+  singleNews: [],
+  isLoading: false,
+  isSuccess: false,
+  isError: false,
+  message: "",
+}
 
 // createNews _____________________________________________________________________________________ createNews
 export const createNews = createAsyncThunk(
@@ -125,12 +125,13 @@ const newsSlice = createSlice({
       .addCase(createNews.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.allNews = action.payload
+        state.allNews.unshift(action.payload.result)
+        state.message = action.payload.message
       })
       .addCase(createNews.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
-        state.message = action.payload
+        state.message = action.payload.message
         state.allNews = []
       })
 
@@ -173,7 +174,8 @@ const newsSlice = createSlice({
       .addCase(editNews.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.singleNews = action.payload
+        state.singleNews = action.payload.result
+        state.message = action.payload.message
       })
       .addCase(editNews.rejected, (state, action) => {
         state.isLoading = false
@@ -185,6 +187,7 @@ const newsSlice = createSlice({
       // deleteNews _____________________________________________________________________________________
       .addCase(deleteNews.pending, (state) => {
         state.isLoading = true
+        state.message = ""
       })
       .addCase(deleteNews.fulfilled, (state, action) => {
         state.isLoading = false

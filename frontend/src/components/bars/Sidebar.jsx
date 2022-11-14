@@ -22,9 +22,9 @@ import { Stack } from "@mui/system"
 const links = [
   { name: "Home", icon: <Home /> },
   { name: "Posts", icon: <Article /> },
-  { name: "Tasks", icon: <Task /> },
   { name: "News", icon: <Newspaper /> },
   { name: "Questions", icon: <QuestionMark /> },
+  { name: "Tasks", icon: <Task /> },
   { name: "About", icon: <Face /> },
 ]
 

@@ -10,21 +10,17 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material"
-import {
-  Edit,
-  DeleteForever,
-  Visibility,
-  ChatBubbleOutline,
-} from "@mui/icons-material/"
+import { Edit, DeleteForever, ChatBubbleOutline } from "@mui/icons-material/"
 import { useNavigate } from "react-router-dom"
 import { deletePost } from "../../features/posts/postSlice"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 const PostItem = ({ post, user }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const location = useLocation()
 
   return (
     <>
@@ -41,6 +37,14 @@ const PostItem = ({ post, user }) => {
           },
         }}
       >
+        {location.pathname === "/" && (
+          <CardContent>
+            <Typography variant="caption" component={Link} to="/posts">
+              Posts
+            </Typography>
+          </CardContent>
+        )}
+
         <CardMedia
           component="img"
           height="194"

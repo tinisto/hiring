@@ -1,14 +1,4 @@
-import {
-  Box,
-  Typography,
-  Container,
-  Paper,
-  IconButton,
-  Tooltip,
-  Button,
-  Divider,
-  Stack,
-} from "@mui/material"
+import { Box, Container, Paper } from "@mui/material"
 import React from "react"
 import {
   getOneQuestionById,
@@ -19,16 +9,19 @@ import { useNavigate, useParams } from "react-router-dom"
 import CommentCreate from "../../comments/CommentCreate"
 import CommentsGetAll from "../../comments/CommentsGetAll"
 import QuestionByIdViewsCommentCountBlock from "./QuestionByIdViewsCommentCountBlock"
-import QuestionByIdOpenCommentForm from "./QuestionByIdOpenCommentForm"
-import QuestionByIdIfUserTheSameDeleteEditBlock from "./QuestionByIdIfUserTheSameDeleteEditBlock"
 import QuestionByIdMainContent from "./QuestionByIdMainContent"
+import SnackbarFromUtils from "../../../utils/SnackbarFromUtils"
+import UserTheSameDeleteEditBlockFromUtils from "../../../utils/UserTheSameDeleteEditBlockFromUtils"
+import OpenCommentFormFromUtils from "../../../utils/OpenCommentFormFromUtils"
+import ViewsCommentCountBlock from "../../../utils/ViewCountBlockFromUtils"
+
 const { getAllComments } = require("../../../features/comments/commentSlice.js")
 
 const QuestionById = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { isLoadingQuestion, allQuestions, singleQuestion } = useSelector(
+  const { isLoadingQuestion, singleQuestion, messageQuestion } = useSelector(
     (state) => state.questions
   )
 
@@ -49,9 +42,20 @@ const QuestionById = () => {
     dispatch(getAllComments(id))
   }, [dispatch, id, commentsSlice_isSuccess, navigate])
 
+  React.useEffect(() => {
+    if (messageQuestion) {
+      setOpenSnackbar(true)
+    }
+  }, [messageQuestion])
+
   const handleDelete = async (id) => {
     await dispatch(deleteQuestion(id))
     navigate("/questions")
+  }
+
+  const [openSnackbar, setOpenSnackbar] = React.useState(false)
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false)
   }
 
   return (
@@ -64,17 +68,19 @@ const QuestionById = () => {
             <Paper sx={{ mt: 5, padding: 3 }}>
               <QuestionByIdMainContent singleQuestion={singleQuestion} />
               <Box display={"flex"}>
-                <QuestionByIdViewsCommentCountBlock
+                <ViewsCommentCountBlock singleQuestion={singleQuestion} />
+
+                {/* <QuestionByIdViewsCommentCountBlock
                   singleQuestion={singleQuestion}
                   commentsSlice_commentsAll={commentsSlice_commentsAll}
-                />
-                <QuestionByIdOpenCommentForm
+                /> */}
+                <OpenCommentFormFromUtils
                   setOpenCommentBox={setOpenCommentBox}
                   openCommentBox={openCommentBox}
                 />
 
                 {user?.id === singleQuestion?.User?.id && (
-                  <QuestionByIdIfUserTheSameDeleteEditBlock
+                  <UserTheSameDeleteEditBlockFromUtils
                     handleDelete={handleDelete}
                     id={id}
                   />
@@ -94,6 +100,11 @@ const QuestionById = () => {
           </Container>
         </>
       )}
+      <SnackbarFromUtils
+        openSnackbar={openSnackbar}
+        handleCloseSnackbar={handleCloseSnackbar}
+        message={messageQuestion}
+      />
     </>
   )
 }

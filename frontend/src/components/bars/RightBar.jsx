@@ -13,9 +13,8 @@ const RightBar = ({ pathname }) => {
             startIcon={<AddCircleOutlineIcon />}
             component={Link}
             to="/posts/add"
-            color="success"
           >
-            Create new post
+            Create post
           </Button>
         )
       case "/tasks":
@@ -25,7 +24,6 @@ const RightBar = ({ pathname }) => {
             startIcon={<AddCircleOutlineIcon />}
             component={Link}
             to="/tasks"
-            color="error"
           >
             Create new task
           </Button>
@@ -37,7 +35,6 @@ const RightBar = ({ pathname }) => {
             startIcon={<AddCircleOutlineIcon />}
             component={Link}
             to="/news/add"
-            color="secondary"
           >
             Create news
           </Button>
@@ -49,9 +46,8 @@ const RightBar = ({ pathname }) => {
             startIcon={<AddCircleOutlineIcon />}
             component={Link}
             to="/questions/add"
-            color="warning"
           >
-            Ask question
+            Ask a question
           </Button>
         )
       default:

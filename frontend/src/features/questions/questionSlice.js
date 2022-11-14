@@ -125,14 +125,16 @@ const questionSlice = createSlice({
       .addCase(createQuestion.fulfilled, (state, action) => {
         state.isLoadingQuestion = false
         state.isSuccessQuestion = true
-        state.allQuestions.unshift(action.payload)
+        state.allQuestions.unshift(action.payload.result)
+        state.messageQuestion = action.payload.message
       })
       .addCase(createQuestion.rejected, (state, action) => {
         state.isLoadingQuestion = false
         state.isErrorQuestion = true
-        state.messageQuestion = action.payload
+        state.messageQuestion = action.payload.message
         state.allQuestions = []
       })
+
       // getAllQuestion _____________________________________________________________________________________
       .addCase(getAllQuestion.pending, (state) => {
         state.isLoadingQuestion = true
@@ -172,7 +174,8 @@ const questionSlice = createSlice({
       .addCase(editQuestion.fulfilled, (state, action) => {
         state.isLoadingQuestion = false
         state.isSuccessQuestion = true
-        state.singleQuestion = action.payload
+        state.singleQuestion = action.payload.result
+        state.messageQuestion = action.payload.message
       })
       .addCase(editQuestion.rejected, (state, action) => {
         state.isLoadingQuestion = false
@@ -184,6 +187,7 @@ const questionSlice = createSlice({
       // deleteQuestion _____________________________________________________________________________________
       .addCase(deleteQuestion.pending, (state) => {
         state.isLoadingQuestion = true
+        state.messageQuestion = ""
       })
       .addCase(deleteQuestion.fulfilled, (state, action) => {
         state.isLoadingQuestion = false
@@ -192,7 +196,7 @@ const questionSlice = createSlice({
           (item) => item.id !== +action.payload.id
         )
         state.singleQuestion = []
-        state.messageQuestion = action.payload.messageQuestion
+        state.messageQuestion = action.payload.message
       })
       .addCase(deleteQuestion.rejected, (state, action) => {
         state.isLoadingQuestion = false

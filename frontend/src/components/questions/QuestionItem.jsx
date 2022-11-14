@@ -12,11 +12,12 @@ import { useNavigate } from "react-router-dom"
 import { deleteQuestion } from "../../features/questions/questionSlice"
 import { useDispatch } from "react-redux"
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 const QuestionItem = ({ oneQuestion, user }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const location = useLocation()
 
   return (
     <>
@@ -33,9 +34,16 @@ const QuestionItem = ({ oneQuestion, user }) => {
           },
         }}
       >
-        <CardContent component={Link} to={`/news/${oneQuestion.id}`}>
+        {location.pathname === "/" && (
+          <CardContent>
+            <Typography variant="caption" component={Link} to="/questions">
+              Questions
+            </Typography>
+          </CardContent>
+        )}
+        <CardContent component={Link} to={`/questions/${oneQuestion.id}`}>
           <Typography variant="body2" color="text.secondary">
-            {oneQuestion.textQuestion}
+            {oneQuestion.text}
           </Typography>
         </CardContent>
         <CardActions>
@@ -43,7 +51,7 @@ const QuestionItem = ({ oneQuestion, user }) => {
             <Box marginRight={"auto"}>
               <Tooltip title="Comments" arrow>
                 <IconButton
-                  onClick={() => navigate(`/news/${oneQuestion?.id}`)}
+                  onClick={() => navigate(`/questions/${oneQuestion?.id}`)}
                 >
                   <ChatBubbleOutline />
                   <Typography ml={1} variant="body2">

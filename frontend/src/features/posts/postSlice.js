@@ -126,7 +126,8 @@ const postSlice = createSlice({
       .addCase(createPost.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.posts.unshift(action.payload)
+        state.posts.unshift(action.payload.result)
+        state.message = action.payload.message
       })
       .addCase(createPost.rejected, (state, action) => {
         state.isLoading = false
@@ -174,18 +175,20 @@ const postSlice = createSlice({
       .addCase(editPost.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.singlePost = action.payload
+        state.singlePost = action.payload.result
+        state.message = action.payload.message
       })
       .addCase(editPost.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
-        state.message = action.payload
+        state.message = action.payload.message
         state.singlePost = []
       })
 
       // deletePost _____________________________________________________________________________________
       .addCase(deletePost.pending, (state) => {
         state.isLoading = true
+        state.message = ""
       })
       .addCase(deletePost.fulfilled, (state, action) => {
         state.isLoading = false

@@ -31,6 +31,7 @@ app.use("/upload", upload.single("file"), (req, res) => {
 // app.use("/uploads", express.static(__dirname + "/uploads"))
 // app.use("/upload", require("./routes/upload.js"))
 app.use("/auth", require("./routes/userRouter.js"))
+app.use("/articles", require("./routes/articleRouter.js"))
 app.use("/tasks", require("./routes/taskRoute.js"))
 app.use("/posts", require("./routes/postRouter.js"))
 app.use("/questions", require("./routes/questionRouter.js"))

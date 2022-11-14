@@ -1,31 +1,27 @@
-import {
-  Box,
-  Typography,
-  Container,
-  Paper,
-  IconButton,
-  Tooltip,
-  Button,
-  Divider,
-  Stack,
-} from "@mui/material"
+import { Box, Container, Paper } from "@mui/material"
 import React from "react"
-import { getOnePostById, deletePost } from "../../../features/posts/postSlice"
+import {
+  getOnePostById,
+  deletePost,
+  reset,
+} from "../../../features/posts/postSlice"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import CommentCreate from "../../comments/CommentCreate"
 import CommentsGetAll from "../../comments/CommentsGetAll"
-import PostByIdViewsCommentCountBlock from "./PostByIdViewsCommentCountBlock"
-import PostByIdOpenCommentForm from "./PostByIdOpenCommentForm"
-import PostByIdIfUserTheSameDeleteEditBlock from "./PostByIdIfUserTheSameDeleteEditBlock"
 import PostByIdMainContent from "./PostByIdMainContent"
+import SnackbarFromUtils from "../../../utils/SnackbarFromUtils"
+import UserTheSameDeleteEditBlockFromUtils from "../../../utils/UserTheSameDeleteEditBlockFromUtils"
+import OpenCommentFormFromUtils from "../../../utils/OpenCommentFormFromUtils"
+import ViewsCommentCountBlock from "../../../utils/ViewCountBlockFromUtils"
+
 const { getAllComments } = require("../../../features/comments/commentSlice.js")
 
 const DiaryById = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { isLoading, posts, singlePost } = useSelector((state) => state.posts)
+  const { isLoading, singlePost, message } = useSelector((state) => state.posts)
   const [openCommentBox, setOpenCommentBox] = React.useState(false)
 
   const {
@@ -48,6 +44,17 @@ const DiaryById = () => {
     navigate("/posts")
   }
 
+  // snackbar
+  React.useEffect(() => {
+    if (message) {
+      setOpenSnackbar(true)
+    }
+  }, [message])
+  const [openSnackbar, setOpenSnackbar] = React.useState(false)
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false)
+  }
+
   return (
     <>
       {isLoading ? (
@@ -58,17 +65,15 @@ const DiaryById = () => {
             <Paper sx={{ mt: 5, padding: 3 }}>
               <PostByIdMainContent singlePost={singlePost} />
               <Box display={"flex"}>
-                <PostByIdViewsCommentCountBlock
-                  singlePost={singlePost}
-                  commentsSlice_commentsAll={commentsSlice_commentsAll}
-                />
-                <PostByIdOpenCommentForm
+                <ViewsCommentCountBlock singlePost={singlePost} />
+
+                <OpenCommentFormFromUtils
                   setOpenCommentBox={setOpenCommentBox}
                   openCommentBox={openCommentBox}
                 />
 
                 {user?.id === singlePost?.User?.id && (
-                  <PostByIdIfUserTheSameDeleteEditBlock
+                  <UserTheSameDeleteEditBlockFromUtils
                     handleDelete={handleDelete}
                     id={id}
                   />
@@ -88,6 +93,11 @@ const DiaryById = () => {
           </Container>
         </>
       )}
+      <SnackbarFromUtils
+        openSnackbar={openSnackbar}
+        handleCloseSnackbar={handleCloseSnackbar}
+        message={message}
+      />
     </>
   )
 }

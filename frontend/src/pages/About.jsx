@@ -2,8 +2,14 @@ import { Container, Typography } from "@mui/material"
 
 const About = () => {
   return (
-    <Container>
-      <Typography variant="h3" textAlign={"center"} mt={5}>
+    <Container maxWidth="lg">
+      <Typography
+        textAlign="center"
+        fontWeight={700}
+        variant="h5"
+        component="h1"
+        marginY={2}
+      >
         Full Stack Web Developer
       </Typography>
       <Typography>

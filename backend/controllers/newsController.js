@@ -1,23 +1,28 @@
-const { User, News } = require("../models")
+const { User, News, Article } = require("../models")
 const { validationResult } = require("express-validator")
-const e = require("express")
+const CategoryId = 2
 
 // create News
 const createNews = async (req, res) => {
-  const { titleNews, textNews } = req.body
-  const result = await News.create({
-    titleNews,
-    textNews,
-    UserId: req.User.id,
-  })
-
-  res.status(200).json(result)
+  const { title, text } = req.body
+  try {
+    const result = await Article.create({
+      title,
+      text,
+      CategoryId,
+      UserId: req.User.id,
+    })
+    res.status(200).json({ result, message: "News added" })
+  } catch (error) {
+    return res.status(500).json({ message: "Something went wrong" })
+  }
 }
 
 // getAllNews _____________________________________________________________________________________
 const getAllNews = async (req, res) => {
   try {
-    result = await News.findAll({
+    result = await Article.findAll({
+      where: { CategoryId },
       order: [["createdAt", "DESC"]],
       //   include: [User, Comment],
       include: User,
@@ -32,11 +37,11 @@ const getAllNews = async (req, res) => {
 // getOneNews _____________________________________________________________________________________
 const getOneNews = async (req, res) => {
   try {
-    result = await News.findByPk(req.params.id, { include: User })
+    result = await Article.findByPk(req.params.id, { include: User })
     if (!result) {
       return res.status(400).json({ message: "Can't get a News" })
     }
-    const incrementResult = await result.increment("viewCountNews", { by: 1 })
+    const incrementResult = await result.increment("viewCount", { by: 1 })
     await result.reload()
     res.status(200).json(result)
   } catch (error) {
@@ -52,13 +57,13 @@ const removeNews = async (req, res) => {
     if (!req.User) {
       return res.status(401).json({ message: "User not found" })
     }
-    result = await News.findByPk(req.params.id)
+    result = await Article.findByPk(req.params.id)
     if (!result) {
       return res.status(400).json({ message: "Can't get a News" })
     }
 
     if (result.UserId === req.User.id) {
-      await News.destroy({ where: { id: req.params.id } })
+      await Article.destroy({ where: { id: req.params.id } })
       res.status(200).json({ id, message: "News deleted" })
     } else {
       res.status(401).json({ message: "Not authorized" })
@@ -71,9 +76,9 @@ const removeNews = async (req, res) => {
 
 // editNews _____________________________________________________________________________________
 const editNews = async (req, res) => {
-  const { titleNews, textNews } = req.body
+  const { title, text } = req.body
   try {
-    if (!titleNews || !textNews) {
+    if (!title || !text) {
       return res
         .status(400)
         .json({ message: "Please enter all requirement fields" })
@@ -81,17 +86,17 @@ const editNews = async (req, res) => {
     if (!req.User) {
       return res.status(401).json({ message: "User not found" })
     }
-    result = await News.findByPk(req.params.id)
+    result = await Article.findByPk(req.params.id)
     if (!result) {
       return res.status(400).json({ message: "Can't get a News" })
     }
 
     if (result.UserId === req.User.id) {
-      await News.update(
-        { titleNews, textNews },
+      const result = await Article.update(
+        { title, text },
         { where: { id: req.params.id } }
       )
-      res.status(200).json({ message: "News was edited successfully" })
+      res.status(200).json({ result, message: "News was edited successfully" })
     } else {
       res.status(401).json({ message: "Not authorized" })
     }

@@ -15,11 +15,11 @@ const TaskList = () => {
   return (
     <Container maxWidth="lg">
       <Typography
-        variant="h5"
-        textAlign={"center"}
+        textAlign="center"
         fontWeight={700}
-        marginTop={5}
-        marginBottom={3}
+        variant="h5"
+        component="h1"
+        marginY={2}
       >
         Task Management
       </Typography>

@@ -4,7 +4,7 @@ import { getOnePostById, editPost } from "../../features/posts/postSlice"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 
-const DiaryEdit = () => {
+const PostEdit = () => {
   const { id } = useParams()
 
   const navigate = useNavigate()
@@ -79,4 +79,4 @@ const DiaryEdit = () => {
     </Box>
   )
 }
-export default DiaryEdit
+export default PostEdit

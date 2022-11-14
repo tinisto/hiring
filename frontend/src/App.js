@@ -1,5 +1,5 @@
 import { Home, Login, Registration } from "./pages"
-import { Posts, PostEdit, PostAdd, PostById } from "./components/posts"
+import { PostAll, PostEdit, PostAdd, PostById } from "./components/posts"
 import { NewsAll, NewsById, NewsEdit, NewsAdd } from "./components/news"
 import {
   QuestionAll,
@@ -19,12 +19,12 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route path="index" element={<Home />} />
+          <Route index element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Registration />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/posts" element={<Posts />} />
+          <Route path="/posts" element={<PostAll />} />
           <Route path="/posts/:id" element={<PostById />} />
           <Route path="/posts/edit/:id" element={<PostEdit />} />
           <Route path="/posts/add" element={<PostAdd />} />

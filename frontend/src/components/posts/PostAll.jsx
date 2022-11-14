@@ -1,17 +1,19 @@
-import NewsItem from "./NewsItem"
+import PostItem from "./PostItem"
 import { useSelector, useDispatch } from "react-redux"
-import { getAllNews } from "../../features/news/newsSlice"
+import { getAllPosts } from "../../features/posts/postSlice"
 import React from "react"
 import { Box, Container, Typography } from "@mui/material"
+import { useLocation } from "react-router-dom"
 import SnackbarFromUtils from "../../utils/SnackbarFromUtils"
 
-const NewsAll = () => {
-  const { allNews, message } = useSelector((state) => state.news)
+const PostAll = () => {
+  const location = useLocation()
+  const { posts, message } = useSelector((state) => state.posts)
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
 
   React.useEffect(() => {
-    dispatch(getAllNews())
+    dispatch(getAllPosts({ urlLink: location.pathname }))
   }, [dispatch])
 
   // snackbar
@@ -26,7 +28,7 @@ const NewsAll = () => {
   }
   return (
     <Container maxWidth="lg">
-      {allNews.length ? (
+      {posts.length ? (
         <Box>
           <Typography
             textAlign="center"
@@ -35,18 +37,17 @@ const NewsAll = () => {
             component="h1"
             marginY={2}
           >
-            News
+            Posts
           </Typography>
-
-          {allNews.map((oneNews) => (
-            <NewsItem key={oneNews.id} oneNews={oneNews} user={user} />
+          {posts.map((post) => (
+            <PostItem key={post.id} post={post} user={user} />
           ))}
         </Box>
       ) : (
         <>
           <Box>
             <Typography marginTop={3} textAlign={"center"} variant="h6">
-              No news yet
+              No posts yet
             </Typography>
           </Box>
         </>
@@ -59,4 +60,4 @@ const NewsAll = () => {
     </Container>
   )
 }
-export default NewsAll
+export default PostAll
