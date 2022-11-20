@@ -5,12 +5,14 @@ import React from "react"
 import PopoverComponent from "./PopoverComponent"
 import CommentEdit from "./CommentEdit"
 import PersonIcon from "@mui/icons-material/Person"
+import moment from "moment"
 
 const CommentItem = ({ item, ArticleId }) => {
   const dispatch = useDispatch()
   const { commentsSlice_message } = useSelector((state) => state.comments)
   const { user } = useSelector((state) => state.auth)
   const [commentText, setCommentText] = React.useState("")
+  const timeago = moment(item.createdAt).fromNow()
 
   React.useEffect(() => {
     setCommentText(item.commentText)
@@ -59,8 +61,14 @@ const CommentItem = ({ item, ArticleId }) => {
           </Paper>
         ) : (
           <Paper sx={{ background: "#f1f2f5", padding: 1 }} elevation={0}>
-            <Typography variant="caption" fontWeight={500} va>
-              {item?.User?.firstName} {item?.User?.lastName}
+            <Typography variant="caption">
+              <Box display="inline" fontWeight={500}>
+                {item?.User?.firstName} {item?.User?.lastName}
+              </Box>
+              <Box display="inline" fontWeight={100}>
+                {" "}
+                &bull; {timeago}
+              </Box>
             </Typography>
             <Typography style={{ whiteSpace: "pre-wrap" }} variant="body2">
               {commentText}
