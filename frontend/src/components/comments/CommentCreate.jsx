@@ -1,19 +1,11 @@
 import React from "react"
-import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material"
-import { useSelector, useDispatch } from "react-redux"
+import { Avatar, Button, Stack, TextField } from "@mui/material"
+import { useDispatch } from "react-redux"
 import { createComment } from "../../features/comments/commentSlice"
 import { useNavigate } from "react-router-dom"
 import PersonIcon from "@mui/icons-material/Person"
 
-const CommentCreate = ({ id, user }) => {
+const CommentCreate = ({ id, user, setOpenCommentBox }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -61,7 +53,19 @@ const CommentCreate = ({ id, user }) => {
         size="small"
         multiline
       />
-      <Button type="submit">submit</Button>
+      <Stack direction="row" spacing={2} justifyContent="center">
+        <Button variant="contained" size="small" type="submit">
+          submit
+        </Button>
+        <Button
+          color="error"
+          size="small"
+          variant="outlined"
+          onClick={() => setOpenCommentBox(false)}
+        >
+          Close
+        </Button>
+      </Stack>
     </Stack>
   )
 }

@@ -3,8 +3,9 @@ import { useSelector, useDispatch } from "react-redux"
 import { getArticlesByCategory } from "../../features/articles/articleSlice"
 import React from "react"
 import { Box, Container, Typography } from "@mui/material"
-import { useLocation, useMatch } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import SnackbarFromUtils from "../../utils/SnackbarFromUtils"
+import { v4 } from "uuid"
 
 const PostAll = () => {
   const location = useLocation()
@@ -35,7 +36,7 @@ const PostAll = () => {
 
   return (
     <Container maxWidth="lg">
-      {articles.length ? (
+      {articles.length > 0 ? (
         <Box>
           <Typography
             textAlign="center"
@@ -48,10 +49,10 @@ const PostAll = () => {
           </Typography>
           {articles.map((post) => (
             <PostItem
-              key={post?.id}
+              key={v4()}
               post={post}
               user={user}
-              id={post.id}
+              id={post?.id}
               isLoading={isLoading}
             />
           ))}

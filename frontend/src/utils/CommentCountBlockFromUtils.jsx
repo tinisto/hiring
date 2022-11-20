@@ -9,7 +9,7 @@ const CommentCountBlockFromUtils = ({
   return (
     <Tooltip title="Comments" arrow>
       <IconButton onClick={() => setOpenCommentBox(!openCommentBox)}>
-        <Typography ml={1} variant="body2">
+        <>
           {commentsSlice_commentsAll?.length ===
           0 ? null : commentsSlice_commentsAll?.length === 1 ? (
             <Stack direction="row" justifyContent="center" alignItems="center">
@@ -26,7 +26,7 @@ const CommentCountBlockFromUtils = ({
               </Typography>
             </Stack>
           )}
-        </Typography>
+        </>
       </IconButton>
     </Tooltip>
   )

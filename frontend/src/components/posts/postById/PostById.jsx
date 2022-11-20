@@ -26,7 +26,7 @@ import ViewCountBlockFromUtils from "../../../utils/ViewCountBlockFromUtils"
 
 const { getAllComments } = require("../../../features/comments/commentSlice.js")
 
-const DiaryById = () => {
+const PostById = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -115,7 +115,6 @@ const DiaryById = () => {
                   openCommentBox={openCommentBox}
                 />
               )}
-
               {user?.id === singleArticle?.User?.id && (
                 <UserTheSameDeleteEditBlockFromUtils
                   handleDelete={handleDelete}
@@ -140,7 +139,13 @@ const DiaryById = () => {
             {commentsSlice_commentsAll.length > 0 && (
               <Divider sx={{ marginBottom: 2 }} />
             )}
-            {openCommentBox && <CommentCreate user={user} id={id} />}
+            {openCommentBox && (
+              <CommentCreate
+                user={user}
+                id={id}
+                setOpenCommentBox={setOpenCommentBox}
+              />
+            )}
             {commentsSlice_commentsAll.length > 0 && (
               <CommentsGetAll
                 commentsSlice_commentsAll={commentsSlice_commentsAll}
@@ -159,4 +164,4 @@ const DiaryById = () => {
     </Container>
   )
 }
-export default DiaryById
+export default PostById

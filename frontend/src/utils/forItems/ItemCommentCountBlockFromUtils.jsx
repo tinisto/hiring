@@ -15,7 +15,7 @@ const ItemCommentCountBlockFromUtils = (props) => {
           })
         }
       >
-        <Typography ml={1} variant="body2">
+        <>
           {singleArticle?.Comments?.length === 0 ? null : singleArticle
               ?.Comments?.length === 1 ? (
             <Stack direction="row" justifyContent="center" alignItems="center">
@@ -32,7 +32,7 @@ const ItemCommentCountBlockFromUtils = (props) => {
               </Typography>
             </Stack>
           )}
-        </Typography>
+        </>
       </IconButton>
     </Tooltip>
   )

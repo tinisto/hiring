@@ -22,6 +22,7 @@ const CommentEdit = ({ onSubmit, commentText, onChange, setOpenEditBox }) => {
         <Button
           color="error"
           size="small"
+          variant="outlined"
           onClick={() => setOpenEditBox(false)}
         >
           Cancel

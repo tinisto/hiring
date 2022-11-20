@@ -5,6 +5,7 @@ import React from "react"
 import { Box, Container, Typography } from "@mui/material"
 import SnackbarFromUtils from "../../utils/SnackbarFromUtils"
 import { useLocation } from "react-router-dom"
+import { v4 } from "uuid"
 
 const NewsAll = () => {
   const location = useLocation()
@@ -49,11 +50,11 @@ const NewsAll = () => {
 
           {articles.map((oneNews) => (
             <NewsItem
-              key={oneNews.id}
+              key={v4()}
               oneNews={oneNews}
               user={user}
               message={message}
-              id={oneNews.id}
+              id={oneNews?.id}
               isLoading={isLoading}
             />
           ))}

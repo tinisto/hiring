@@ -27,74 +27,70 @@ const QuestionItem = ({ oneQuestion, user, id, isLoading }) => {
   }
 
   return (
-    <>
-      <Card
-        sx={{
-          width: "75%",
-          height: "75%",
-          margin: "auto",
-          padding: 1,
-          boxShadow: "5px 5px 10px #ccc",
-          marginBottom: 3,
-          ":hover": {
-            boxShadow: "10px 10px 20px #ccc",
-          },
-        }}
-      >
-        {location.pathname === "/" && (
-          <CardContent>
-            {isLoading ? (
-              <Skeleton />
-            ) : (
-              <Typography variant="caption" component={Link} to="/questions">
-                Questions
-              </Typography>
-            )}
-          </CardContent>
-        )}
-        <CardContent component={Link} to={`/questions/${oneQuestion.id}`}>
+    <Card
+      sx={{
+        width: "75%",
+        height: "75%",
+        margin: "auto",
+        padding: 1,
+        boxShadow: "5px 5px 10px #ccc",
+        marginBottom: 3,
+        ":hover": {
+          boxShadow: "10px 10px 20px #ccc",
+        },
+      }}
+    >
+      {location.pathname === "/" && (
+        <CardContent>
           {isLoading ? (
-            <>
-              <Skeleton />
-              <Skeleton />
-            </>
+            <Skeleton />
           ) : (
-            <Typography variant="h6" color="text.secondary">
-              {oneQuestion.text}
+            <Typography variant="caption" component={Link} to="/questions">
+              Questions
             </Typography>
           )}
         </CardContent>
+      )}
+      <CardContent component={Link} to={`/questions/${oneQuestion.id}`}>
         {isLoading ? (
-          <Skeleton width="60%" />
+          <>
+            <Skeleton />
+            <Skeleton />
+          </>
         ) : (
-          <CardActions
-            sx={{ display: "flex", justifyContent: "space-between" }}
-          >
-            <ViewCountBlockFromUtils singleArticle={oneQuestion} />
-
-            {oneQuestion?.Comments?.length === 0 ? (
-              <ItemOpenCommentFormFromUtils
-                link="questions"
-                singleArticle={oneQuestion}
-              />
-            ) : (
-              <ItemCommentCountBlockFromUtils
-                link="questions"
-                singleArticle={oneQuestion}
-              />
-            )}
-
-            {user?.id === oneQuestion?.User?.id && (
-              <UserTheSameDeleteEditBlockFromUtils
-                handleDelete={handleDelete}
-                link="questions"
-                id={oneQuestion?.id}
-              />
-            )}
-          </CardActions>
+          <Typography variant="h6" color="text.secondary">
+            {oneQuestion.text}
+          </Typography>
         )}
-      </Card>
-    </>
+      </CardContent>
+      {isLoading ? (
+        <Skeleton width="60%" />
+      ) : (
+        <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
+          <ViewCountBlockFromUtils singleArticle={oneQuestion} />
+
+          {oneQuestion?.Comments?.length === 0 ? (
+            <ItemOpenCommentFormFromUtils
+              link="questions"
+              singleArticle={oneQuestion}
+            />
+          ) : (
+            <ItemCommentCountBlockFromUtils
+              link="questions"
+              singleArticle={oneQuestion}
+            />
+          )}
+
+          {user?.id === oneQuestion?.User?.id && (
+            <UserTheSameDeleteEditBlockFromUtils
+              handleDelete={handleDelete}
+              link="questions"
+              id={oneQuestion?.id}
+            />
+          )}
+        </CardActions>
+      )}
+    </Card>
   )
 }
 export default QuestionItem

@@ -35,7 +35,6 @@ const QuestionById = () => {
   const { isLoading, singleArticle, message } = useSelector(
     (state) => state.articleStore
   )
-
   const [openCommentBox, setOpenCommentBox] = React.useState(false)
 
   React.useEffect(() => {
@@ -140,7 +139,13 @@ const QuestionById = () => {
             {commentsSlice_commentsAll.length > 0 && (
               <Divider sx={{ marginBottom: 2 }} />
             )}
-            {openCommentBox && <CommentCreate user={user} id={id} />}
+            {openCommentBox && (
+              <CommentCreate
+                user={user}
+                id={id}
+                setOpenCommentBox={setOpenCommentBox}
+              />
+            )}
             {commentsSlice_commentsAll.length > 0 && (
               <CommentsGetAll
                 commentsSlice_commentsAll={commentsSlice_commentsAll}

@@ -1,11 +1,12 @@
-import { Avatar, Box, Paper, Stack, Tooltip, Typography } from "@mui/material"
+import { Box, Paper, Stack, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
 import { updateComment } from "../../features/comments/commentSlice"
 import React from "react"
-import PopoverComponent from "./PopoverComponent"
+import PopoverComponentUsersMatch from "./PopoverComponentUsersMatch"
 import CommentEdit from "./CommentEdit"
-import PersonIcon from "@mui/icons-material/Person"
 import moment from "moment"
+import CommentPopoverUserInfo from "./CommentPopoverUserInfo"
+import PopoverComponentUsersNOTMatch from "./PopoverComponentUsersNOTMatch"
 
 const CommentItem = ({ item, ArticleId }) => {
   const dispatch = useDispatch()
@@ -32,7 +33,6 @@ const CommentItem = ({ item, ArticleId }) => {
       commentId: item.id,
       commentText: commentText.trim(),
     }
-    console.log("commentText", commentText)
     setOpenEditBox(false)
     dispatch(updateComment(commentData))
   }
@@ -40,16 +40,14 @@ const CommentItem = ({ item, ArticleId }) => {
   return (
     <>
       <Stack direction="row" spacing={1} margin={2}>
-        <Avatar>
-          <PersonIcon />
-        </Avatar>
+        <CommentPopoverUserInfo userInfo={item.User} />
 
         {openEditBox ? (
           <Paper
             sx={{ background: "#f1f2f5", padding: 1, width: 1 }}
             elevation={0}
           >
-            <Typography variant="caption" fontWeight={500} va>
+            <Typography variant="caption" fontWeight={500}>
               {item?.User?.firstName} {item?.User?.lastName}
             </Typography>
             <CommentEdit
@@ -78,7 +76,18 @@ const CommentItem = ({ item, ArticleId }) => {
 
         {user?.id === item?.User?.id && !openEditBox ? (
           <Box>
-            <PopoverComponent
+            <PopoverComponentUsersMatch
+              commentData={commentData}
+              commentsSlice_message={commentsSlice_message}
+              setOpenEditBox={setOpenEditBox}
+            />
+          </Box>
+        ) : (
+          <></>
+        )}
+        {user?.id !== item?.User?.id && !openEditBox ? (
+          <Box>
+            <PopoverComponentUsersNOTMatch
               commentData={commentData}
               commentsSlice_message={commentsSlice_message}
               setOpenEditBox={setOpenEditBox}

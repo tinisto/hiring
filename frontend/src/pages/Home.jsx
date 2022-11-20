@@ -30,7 +30,7 @@ const Home = () => {
   return (
     <Container maxWidth="lg">
       {articles?.length ? (
-        <Box>{articles?.map((item) => switchByCategoryId(item))}</Box>
+        <Box>{articles.map((item) => switchByCategoryId(item))}</Box>
       ) : (
         <>
           <Box>

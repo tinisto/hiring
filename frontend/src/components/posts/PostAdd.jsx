@@ -34,7 +34,6 @@ const DiaryAdd = () => {
     setFormdata({ ...formData, [name]: value })
   }
   React.useEffect(() => {
-    // dispatch(reset())
     if (!user) {
       navigate("/login")
     }

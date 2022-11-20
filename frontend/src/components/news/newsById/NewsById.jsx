@@ -140,7 +140,13 @@ const NewsById = () => {
             {commentsSlice_commentsAll.length > 0 && (
               <Divider sx={{ marginBottom: 2 }} />
             )}
-            {openCommentBox && <CommentCreate user={user} id={id} />}
+            {openCommentBox && (
+              <CommentCreate
+                user={user}
+                id={id}
+                setOpenCommentBox={setOpenCommentBox}
+              />
+            )}
             {commentsSlice_commentsAll.length > 0 && (
               <CommentsGetAll
                 commentsSlice_commentsAll={commentsSlice_commentsAll}

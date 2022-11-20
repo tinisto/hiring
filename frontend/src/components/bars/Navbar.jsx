@@ -16,7 +16,7 @@ import PersonIcon from "@mui/icons-material/Person"
 
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt"
 import { useSelector, useDispatch } from "react-redux"
-import { Link, Navigate, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import React from "react"
 import { logoutUser, reset } from "../../features/auth/authSlice"
 

@@ -5,7 +5,7 @@ import CommentDelete from "./CommentDelete"
 import CommentEditButton from "./CommentEditButton"
 import CommentSnackbar from "./CommentSnackbar"
 
-const PopoverComponent = ({
+const PopoverComponentUsersMatch = ({
   commentData,
   setOpenEditBox,
   commentsSlice_message,
@@ -63,4 +63,4 @@ const PopoverComponent = ({
     </>
   )
 }
-export default PopoverComponent
+export default PopoverComponentUsersMatch

@@ -5,6 +5,7 @@ import React from "react"
 import { Box, Container, Typography } from "@mui/material"
 import { useLocation } from "react-router-dom"
 import SnackbarFromUtils from "../../utils/SnackbarFromUtils"
+import { v4 } from "uuid"
 
 const QuestionAll = () => {
   const location = useLocation()
@@ -49,11 +50,11 @@ const QuestionAll = () => {
 
           {articles.map((oneQuestion) => (
             <QuestionItem
-              key={oneQuestion.id}
+              key={v4()}
               oneQuestion={oneQuestion}
               user={user}
               message={message}
-              id={oneQuestion.id}
+              id={oneQuestion?.id}
               isLoading={isLoading}
             />
           ))}
