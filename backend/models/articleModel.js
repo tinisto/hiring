@@ -12,11 +12,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
+    CategoryId: {
+      type: DataTypes.INTEGER,
+    },
   })
 
   Article.associate = (models) => {
     Article.belongsTo(models.User, { onDelete: "CASCADE" })
-    Article.belongsTo(models.Category, { onDelete: "CASCADE" })
     Article.hasMany(models.Comment, { onDelete: "CASCADE" })
   }
   return Article

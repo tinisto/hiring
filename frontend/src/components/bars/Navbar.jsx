@@ -12,6 +12,8 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material"
+import PersonIcon from "@mui/icons-material/Person"
+
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt"
 import { useSelector, useDispatch } from "react-redux"
 import { Link, Navigate, useNavigate } from "react-router-dom"
@@ -96,10 +98,9 @@ const Navbar = () => {
                 <Box marginLeft="auto">
                   <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                      <Avatar
-                        alt="Remy Sharp"
-                        src="/static/images/avatar/2.jpg"
-                      />
+                      <Avatar>
+                        <PersonIcon />
+                      </Avatar>
                     </IconButton>
                   </Tooltip>
                   <Menu

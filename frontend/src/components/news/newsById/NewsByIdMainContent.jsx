@@ -1,21 +1,25 @@
 import { Avatar, Stack, Typography } from "@mui/material"
+import PersonIcon from "@mui/icons-material/Person"
 
-const NewsByIdMainContent = ({ singleNews }) => {
+const NewsByIdMainContent = ({ singleArticle }) => {
   return (
     <>
-      <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
-        {singleNews?.User?.id}
-      </Avatar>
-      <Typography variant="body2" color={"grey"}>
-        By {singleNews?.User?.firstName} {singleNews?.User?.lastName}
-        <br />
-        Published: {new Date(singleNews?.createdAt).toLocaleString()}
-      </Typography>
+      <Stack direction="row" spacing={2} marginY={1}>
+        <Avatar>
+          <PersonIcon />
+        </Avatar>
+        <Typography variant="body2" color={"grey"}>
+          Posted by {singleArticle?.User?.firstName}{" "}
+          {singleArticle?.User?.lastName}
+          <br />
+          Published: {new Date(singleArticle?.createdAt).toLocaleString()}
+        </Typography>
+      </Stack>
       <Typography component="h1" variant="h3">
-        {singleNews?.title}
+        {singleArticle?.title}
       </Typography>
       <Typography variant="h5" color="inherit" paragraph>
-        {singleNews?.text}
+        {singleArticle?.text}
       </Typography>
     </>
   )

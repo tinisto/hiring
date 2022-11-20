@@ -38,9 +38,27 @@ export const createArticle = createAsyncThunk(
 // getAllArticle _____________________________________________________________________________________
 export const getAllArticle = createAsyncThunk(
   "getAllArticle",
+  async (_, thunkAPI) => {
+    try {
+      return await articleService.getAllArticle()
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+// getArticlesByCategory _____________________________________________________________________________________
+export const getArticlesByCategory = createAsyncThunk(
+  "getArticlesByCategory",
   async (urlLink, thunkAPI) => {
     try {
-      return await articleService.getAllArticle(urlLink)
+      return await articleService.getArticlesByCategory(urlLink)
     } catch (error) {
       const message =
         (error.response &&
@@ -56,9 +74,9 @@ export const getAllArticle = createAsyncThunk(
 // getOneArticleById _____________________________________________________________________________________
 export const getOneArticleById = createAsyncThunk(
   "getOneArticleById",
-  async (id, thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
-      return await articleService.getOneArticleById(id)
+      return await articleService.getOneArticleById(data)
     } catch (error) {
       const message =
         (error.response &&
@@ -93,10 +111,10 @@ export const editArticle = createAsyncThunk(
 // deleteArticle _____________________________________________________________________________________
 export const deleteArticle = createAsyncThunk(
   "deleteArticle",
-  async (id, thunkAPI) => {
+  async (formData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token
-      return await articleService.deleteArticle(id, token)
+      return await articleService.deleteArticle(formData, token)
     } catch (error) {
       const message =
         (error.response &&
@@ -121,22 +139,25 @@ const articleSlice = createSlice({
       // createArticle _____________________________________________________________________________________
       .addCase(createArticle.pending, (state) => {
         state.isLoading = true
+        // state.message = ""
       })
       .addCase(createArticle.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
         state.articles.unshift(action.payload)
+        state.message = action.payload.message
       })
       .addCase(createArticle.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
-        state.message = action.payload
+        state.message = action.payload.message
         state.articles = []
       })
 
       // getAllArticle _____________________________________________________________________________________
       .addCase(getAllArticle.pending, (state) => {
         state.isLoading = true
+        // state.message = ""
       })
       .addCase(getAllArticle.fulfilled, (state, action) => {
         state.isLoading = false
@@ -150,9 +171,27 @@ const articleSlice = createSlice({
         state.articles = []
       })
 
+      // getArticlesByCategory _____________________________________________________________________________________
+      .addCase(getArticlesByCategory.pending, (state) => {
+        state.isLoading = true
+        // state.message = ""
+      })
+      .addCase(getArticlesByCategory.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.articles = action.payload
+      })
+      .addCase(getArticlesByCategory.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+        state.articles = []
+      })
+
       // getOneArticleById _____________________________________________________________________________________
       .addCase(getOneArticleById.pending, (state) => {
         state.isLoading = true
+        // state.message = ""
       })
       .addCase(getOneArticleById.fulfilled, (state, action) => {
         state.isLoading = false
@@ -162,29 +201,32 @@ const articleSlice = createSlice({
       .addCase(getOneArticleById.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
-        state.message = action.payload
+        state.message = action.payload.message
         state.singleArticle = []
       })
 
       // editArticle _____________________________________________________________________________________
       .addCase(editArticle.pending, (state) => {
         state.isLoading = true
+        // state.message = ""
       })
       .addCase(editArticle.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
         state.singleArticle = action.payload
+        state.message = action.payload.message
       })
       .addCase(editArticle.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
-        state.message = action.payload
+        state.message = action.payload.message
         state.singleArticle = []
       })
 
       // deleteArticle _____________________________________________________________________________________
       .addCase(deleteArticle.pending, (state) => {
         state.isLoading = true
+        // state.message = ""
       })
       .addCase(deleteArticle.fulfilled, (state, action) => {
         state.isLoading = false
@@ -198,7 +240,7 @@ const articleSlice = createSlice({
       .addCase(deleteArticle.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
-        state.message = action.payload
+        state.message = action.payload.message
         state.articles = []
       })
   },

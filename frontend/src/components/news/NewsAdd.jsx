@@ -1,15 +1,19 @@
 import { Alert, Box, Button, TextField, Typography } from "@mui/material"
 import React from "react"
-import { createNews, reset } from "../../features/news/newsSlice"
+import { createArticle, reset } from "../../features/articles/articleSlice"
 import { useSelector, useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 
 const NewsAdd = () => {
+  const location = useLocation()
+  const urlLink = location.pathname.split("/")[1]
   const [alertState, setAlertState] = React.useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.auth)
-  const { isError, message, isSuccess } = useSelector((state) => state.news)
+  const { isError, message, isSuccess } = useSelector(
+    (state) => state.articleStore
+  )
   const [formData, setFormdata] = React.useState({
     title: "",
     text: "",
@@ -18,11 +22,11 @@ const NewsAdd = () => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-
-    dispatch(createNews(formData))
+    const newFormData = { title, text, urlLink }
+    dispatch(createArticle(newFormData))
 
     if (isSuccess) {
-      navigate("/news")
+      navigate("/news", { state: "/news" })
     }
   }
   const onChange = (e) => {

@@ -16,6 +16,7 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
+  Person,
 } from "@mui/material"
 import React from "react"
 import { Link, Navigate, useNavigate } from "react-router-dom"
@@ -35,7 +36,7 @@ function Header({ links }) {
     dispatch(reset())
     dispatch(logoutUser())
   }
-  const settings = ["Profile", "Logout"]
+  const settings = ["Profileq", "Logout"]
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
 
@@ -134,10 +135,10 @@ function Header({ links }) {
                             onClick={handleOpenUserMenu}
                             sx={{ p: 0 }}
                           >
-                            <Avatar
-                              alt="Remy Sharp"
-                              src="/static/images/avatar/2.jpg"
-                            />
+                            <Avatar>
+                              sss
+                              <Person />
+                            </Avatar>
                           </IconButton>
                         </Tooltip>
                         <Menu

@@ -3,12 +3,12 @@ const expressAsyncHandler = require("express-async-handler")
 
 // createComment _____________________________________________________________________________________
 const createComment = async (req, res) => {
-  const { commentText, postId } = req.body
+  const { commentText, ArticleId } = req.body
   const UserId = req.User.id
   try {
     const commentCandidate = await Comment.create({
       commentText,
-      PostId: postId,
+      ArticleId,
       UserId,
       include: User,
     })
@@ -25,10 +25,10 @@ const createComment = async (req, res) => {
 
 // getAllComments _____________________________________________________________________________________
 const getAllComments = async (req, res) => {
-  const postId = req.baseUrl.split("/")[2]
+  const ArticleId = req.baseUrl.split("/")[2]
   try {
     const comment = await Comment.findAll({
-      where: { PostId: postId },
+      where: { ArticleId },
       order: [["createdAt", "DESC"]],
       include: User,
     })

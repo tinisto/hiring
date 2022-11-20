@@ -1,25 +1,14 @@
-import {
-  Avatar,
-  Box,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Paper,
-  Stack,
-  Typography,
-} from "@mui/material"
+import { Avatar, Box, Paper, Stack, Tooltip, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
 import { updateComment } from "../../features/comments/commentSlice"
 import React from "react"
 import PopoverComponent from "./PopoverComponent"
 import CommentEdit from "./CommentEdit"
+import PersonIcon from "@mui/icons-material/Person"
 
-const CommentItem = ({ item, postId }) => {
+const CommentItem = ({ item, ArticleId }) => {
   const dispatch = useDispatch()
-  const { message, isError, commentsSlice_message } = useSelector(
-    (state) => state.comments
-  )
+  const { commentsSlice_message } = useSelector((state) => state.comments)
   const { user } = useSelector((state) => state.auth)
   const [commentText, setCommentText] = React.useState("")
 
@@ -27,7 +16,7 @@ const CommentItem = ({ item, postId }) => {
     setCommentText(item.commentText)
   }, [])
 
-  const commentData = { id: item.id, postId }
+  const commentData = { id: item.id, ArticleId }
   const onChange = (e) => {
     setCommentText(e.target.value)
   }
@@ -36,7 +25,12 @@ const CommentItem = ({ item, postId }) => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-    const commentData = { postId, commentId: item.id, commentText }
+    const commentData = {
+      ArticleId,
+      commentId: item.id,
+      commentText: commentText.trim(),
+    }
+    console.log("commentText", commentText)
     setOpenEditBox(false)
     dispatch(updateComment(commentData))
   }
@@ -44,25 +38,35 @@ const CommentItem = ({ item, postId }) => {
   return (
     <>
       <Stack direction="row" spacing={1} margin={2}>
-        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-        <Paper sx={{ background: "#f1f2f5", padding: 1 }} elevation={0}>
-          <Typography variant="body1" fontWeight={500} va>
-            {item?.User?.firstName} {item?.User?.lastName}
-          </Typography>
+        <Avatar>
+          <PersonIcon />
+        </Avatar>
 
-          {openEditBox ? (
+        {openEditBox ? (
+          <Paper
+            sx={{ background: "#f1f2f5", padding: 1, width: 1 }}
+            elevation={0}
+          >
+            <Typography variant="caption" fontWeight={500} va>
+              {item?.User?.firstName} {item?.User?.lastName}
+            </Typography>
             <CommentEdit
               onSubmit={onSubmit}
               commentText={commentText}
               onChange={onChange}
               setOpenEditBox={setOpenEditBox}
             />
-          ) : (
-            <>
-              <Typography variant="body2">{commentText}</Typography>
-            </>
-          )}
-        </Paper>
+          </Paper>
+        ) : (
+          <Paper sx={{ background: "#f1f2f5", padding: 1 }} elevation={0}>
+            <Typography variant="caption" fontWeight={500} va>
+              {item?.User?.firstName} {item?.User?.lastName}
+            </Typography>
+            <Typography style={{ whiteSpace: "pre-wrap" }} variant="body2">
+              {commentText}
+            </Typography>
+          </Paper>
+        )}
 
         {user?.id === item?.User?.id && !openEditBox ? (
           <Box>

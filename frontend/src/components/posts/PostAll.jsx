@@ -1,19 +1,22 @@
 import PostItem from "./PostItem"
 import { useSelector, useDispatch } from "react-redux"
-import { getAllPosts } from "../../features/posts/postSlice"
+import { getArticlesByCategory } from "../../features/articles/articleSlice"
 import React from "react"
 import { Box, Container, Typography } from "@mui/material"
-import { useLocation } from "react-router-dom"
+import { useLocation, useMatch } from "react-router-dom"
 import SnackbarFromUtils from "../../utils/SnackbarFromUtils"
 
 const PostAll = () => {
   const location = useLocation()
-  const { posts, message } = useSelector((state) => state.posts)
+  const urlLink = location.pathname
+  const { articles, message, isLoading } = useSelector(
+    (state) => state.articleStore
+  )
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
 
   React.useEffect(() => {
-    dispatch(getAllPosts({ urlLink: location.pathname }))
+    dispatch(getArticlesByCategory(urlLink))
   }, [dispatch])
 
   // snackbar
@@ -21,14 +24,18 @@ const PostAll = () => {
     if (message) {
       setOpenSnackbar(true)
     }
-  }, [message])
+    if (isLoading) {
+      setOpenSnackbar(false)
+    }
+  }, [message, isLoading])
   const [openSnackbar, setOpenSnackbar] = React.useState(false)
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false)
   }
+
   return (
     <Container maxWidth="lg">
-      {posts.length ? (
+      {articles.length ? (
         <Box>
           <Typography
             textAlign="center"
@@ -39,8 +46,14 @@ const PostAll = () => {
           >
             Posts
           </Typography>
-          {posts.map((post) => (
-            <PostItem key={post.id} post={post} user={user} />
+          {articles.map((post) => (
+            <PostItem
+              key={post?.id}
+              post={post}
+              user={user}
+              id={post.id}
+              isLoading={isLoading}
+            />
           ))}
         </Box>
       ) : (
@@ -52,11 +65,13 @@ const PostAll = () => {
           </Box>
         </>
       )}
-      <SnackbarFromUtils
-        openSnackbar={openSnackbar}
-        handleCloseSnackbar={handleCloseSnackbar}
-        message={message}
-      />
+      {location.pathname === location.state && message !== "" && (
+        <SnackbarFromUtils
+          openSnackbar={openSnackbar}
+          handleCloseSnackbar={handleCloseSnackbar}
+          message={message}
+        />
+      )}
     </Container>
   )
 }

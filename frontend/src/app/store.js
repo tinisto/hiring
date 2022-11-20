@@ -10,11 +10,11 @@ import articleReducer from "../features/articles/articleSlice"
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    posts: postReducer,
+    articleStore: articleReducer,
     comments: commentReducer,
     tasks: taskReducer,
-    news: newsReducer,
-    questions: questionReducer,
-    articleStore: articleReducer,
+    // posts: postReducer,
+    // news: newsReducer,
+    // questions: questionReducer,
   },
 })

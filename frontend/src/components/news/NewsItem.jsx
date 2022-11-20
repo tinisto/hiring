@@ -3,22 +3,29 @@ import {
   Card,
   CardActions,
   CardContent,
-  CardMedia,
-  IconButton,
-  Tooltip,
+  Skeleton,
   Typography,
 } from "@mui/material"
-import { Edit, DeleteForever, ChatBubbleOutline } from "@mui/icons-material/"
 import { useNavigate } from "react-router-dom"
-import { deleteNews } from "../../features/news/newsSlice"
+import { deleteArticle } from "../../features/articles/articleSlice.js"
 import { useDispatch } from "react-redux"
 import React from "react"
 import { Link, useLocation } from "react-router-dom"
+import UserTheSameDeleteEditBlockFromUtils from "../../utils/UserTheSameDeleteEditBlockFromUtils.jsx"
+import ItemCommentCountBlockFromUtils from "../../utils/forItems/ItemCommentCountBlockFromUtils.jsx"
+import ItemOpenCommentFormFromUtils from "../../utils/forItems/ItemOpenCommentFormFromUtils.jsx"
+import ViewCountBlockFromUtils from "../../utils/ViewCountBlockFromUtils"
 
-const NewsItem = ({ oneNews, user }) => {
+const NewsItem = ({ oneNews, user, id, isLoading }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const location = useLocation()
+
+  const handleDelete = async (id) => {
+    const data = { id, linkSendToData: "news" }
+    await dispatch(deleteArticle(data))
+    navigate("/news", { state: "/news" })
+  }
 
   return (
     <>
@@ -37,60 +44,62 @@ const NewsItem = ({ oneNews, user }) => {
       >
         {location.pathname === "/" && (
           <CardContent>
-            <Typography variant="caption" component={Link} to="/news">
-              News
-            </Typography>
+            {isLoading ? (
+              <Skeleton />
+            ) : (
+              <Typography variant="caption" component={Link} to="/news">
+                News
+              </Typography>
+            )}
           </CardContent>
         )}
         <CardContent component={Link} to={`/news/${oneNews.id}`}>
-          <Typography variant="h6" color="text.secondary">
-            {oneNews.title}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {oneNews.text}
-          </Typography>
+          {isLoading ? (
+            <Skeleton />
+          ) : (
+            <Typography variant="h6" color="text.secondary">
+              {oneNews.title}
+            </Typography>
+          )}
+          {isLoading ? (
+            <>
+              <Skeleton />
+              <Skeleton />
+            </>
+          ) : (
+            <Typography variant="body2" color="text.secondary">
+              {oneNews.text}
+            </Typography>
+          )}
         </CardContent>
-        <CardActions>
-          {oneNews?.Comments?.length > 0 && (
-            <Box marginRight={"auto"}>
-              <Tooltip title="Comments" arrow>
-                <IconButton onClick={() => navigate(`/news/${oneNews?.id}`)}>
-                  <ChatBubbleOutline />
-                  <Typography ml={1} variant="body2">
-                    {oneNews?.Comments?.length === 0 ? (
-                      <></>
-                    ) : oneNews?.Comments?.length === 1 ? (
-                      `${oneNews?.Comments?.length} Comment`
-                    ) : (
-                      `${oneNews?.Comments?.length} Comments`
-                    )}
-                  </Typography>
-                </IconButton>
-              </Tooltip>
-            </Box>
-          )}
+        {isLoading ? (
+          <Skeleton width="60%" />
+        ) : (
+          <CardActions
+            sx={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <ViewCountBlockFromUtils singleArticle={oneNews} />
+            {oneNews?.Comments?.length === 0 ? (
+              <ItemOpenCommentFormFromUtils
+                link="news"
+                singleArticle={oneNews}
+              />
+            ) : (
+              <ItemCommentCountBlockFromUtils
+                link="news"
+                singleArticle={oneNews}
+              />
+            )}
 
-          {user?.id === oneNews?.User?.id && (
-            <Box marginLeft={"auto"}>
-              <Tooltip title="Edit" arrow>
-                <IconButton
-                  color="warning"
-                  onClick={() => navigate(`/news/edit/${oneNews?.id}`)}
-                >
-                  <Edit />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Delete" arrow>
-                <IconButton
-                  color="error"
-                  onClick={() => dispatch(deleteNews(oneNews.id))}
-                >
-                  <DeleteForever />
-                </IconButton>
-              </Tooltip>
-            </Box>
-          )}
-        </CardActions>
+            {user?.id === oneNews?.User?.id && (
+              <UserTheSameDeleteEditBlockFromUtils
+                handleDelete={handleDelete}
+                link="news"
+                id={oneNews?.id}
+              />
+            )}
+          </CardActions>
+        )}
       </Card>
     </>
   )

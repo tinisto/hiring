@@ -1,23 +1,53 @@
 import { Box, IconButton, Tooltip } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 import { Edit, DeleteForever } from "@mui/icons-material/"
-import { useLocation } from "react-router-dom"
 
-const UserTheSameDeleteEditBlockFromUtils = ({ handleDelete, id }) => {
+const UserTheSameDeleteEditBlockFromUtils = ({ handleDelete, id, link }) => {
   const navigate = useNavigate()
-  const location = useLocation()
-  const shortCutURL = location.pathname.split("/")[1]
+  const switchByLink = () => {
+    switch (link) {
+      case "posts":
+        return (
+          <Tooltip title="Edit" arrow>
+            <IconButton
+              color="warning"
+              onClick={() => navigate(`/posts/edit/${id}`)}
+            >
+              <Edit />
+            </IconButton>
+          </Tooltip>
+        )
+      case "news":
+        return (
+          <Tooltip title="Edit" arrow>
+            <IconButton
+              color="warning"
+              onClick={() => navigate(`/news/edit/${id}`)}
+            >
+              <Edit />
+            </IconButton>
+          </Tooltip>
+        )
+      case "questions":
+        return (
+          <Tooltip title="Edit" arrow>
+            <IconButton
+              color="warning"
+              onClick={() => navigate(`/questions/edit/${id}`)}
+            >
+              <Edit />
+            </IconButton>
+          </Tooltip>
+        )
+
+      default:
+        return null
+    }
+  }
 
   return (
-    <Box marginLeft={"auto"}>
-      <Tooltip title="Edit" arrow>
-        <IconButton
-          color="warning"
-          onClick={() => navigate(`/${shortCutURL}/edit/${id}`)}
-        >
-          <Edit />
-        </IconButton>
-      </Tooltip>
+    <Box>
+      {switchByLink()}
       <Tooltip title="Delete" arrow>
         <IconButton color="error" onClick={() => handleDelete(id)}>
           <DeleteForever />

@@ -1,15 +1,19 @@
 import { Alert, Box, Button, TextField, Typography } from "@mui/material"
 import React from "react"
-import { createPost, reset } from "../../features/posts/postSlice"
+import { createArticle, reset } from "../../features/articles/articleSlice"
 import { useSelector, useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 
 const DiaryAdd = () => {
+  const location = useLocation()
+  const urlLink = location.pathname.split("/")[1]
   const [alertState, setAlertState] = React.useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.auth)
-  const { isError, message, isSuccess } = useSelector((state) => state.posts)
+  const { isError, message, isSuccess } = useSelector(
+    (state) => state.articleStore
+  )
   const [formData, setFormdata] = React.useState({
     title: "",
     text: "",
@@ -18,11 +22,11 @@ const DiaryAdd = () => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-
-    dispatch(createPost(formData))
+    const newFormData = { title, text, urlLink }
+    dispatch(createArticle(newFormData))
 
     if (isSuccess) {
-      navigate("/posts")
+      navigate("/posts", { state: "/posts" })
     }
   }
   const onChange = (e) => {

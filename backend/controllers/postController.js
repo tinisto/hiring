@@ -18,6 +18,7 @@ const createPost = async (req, res) => {
     })
     res.status(200).json({ result, message: "Post create" })
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ message: "Something went wrong" })
   }
 }
@@ -40,7 +41,7 @@ const getAllPost = async (req, res) => {
 // getOnePost _____________________________________________________________________________________
 const getOnePost = async (req, res) => {
   try {
-    result = await Article.findByPk(req.params.id, { include: User })
+    result = await Article.findByPk(req.params.id, { include: [User, Comment] })
     if (!result) {
       return res.status(400).json({ message: "Can't get a post" })
     }
@@ -79,7 +80,11 @@ const removePost = async (req, res) => {
 
 // editPost _____________________________________________________________________________________
 const editPost = async (req, res) => {
-  const { title, text } = req.body
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json(errors.array())
+  }
+  const { id, title, text } = req.body
   try {
     if (!title || !text) {
       return res

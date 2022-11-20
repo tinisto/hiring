@@ -1,15 +1,28 @@
-import { Box, Container, Paper } from "@mui/material"
+import {
+  Avatar,
+  Box,
+  Container,
+  Divider,
+  Paper,
+  Skeleton,
+  Stack,
+  Typography,
+} from "@mui/material"
 import React from "react"
-import { getOneNewsById, deleteNews } from "../../../features/news/newsSlice"
+import {
+  getOneArticleById,
+  deleteArticle,
+} from "../../../features/articles/articleSlice.js"
 import { useSelector, useDispatch } from "react-redux"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams, useLocation, Link } from "react-router-dom"
 import CommentCreate from "../../comments/CommentCreate"
 import CommentsGetAll from "../../comments/CommentsGetAll"
 import NewsByIdMainContent from "./NewsByIdMainContent"
 import SnackbarFromUtils from "../../../utils/SnackbarFromUtils"
 import OpenCommentFormFromUtils from "../../../utils/OpenCommentFormFromUtils"
 import UserTheSameDeleteEditBlockFromUtils from "../../../utils/UserTheSameDeleteEditBlockFromUtils"
-import ViewsCommentCountBlock from "../../../utils/ViewCountBlockFromUtils"
+import CommentCountBlockFromUtils from "../../../utils/CommentCountBlockFromUtils"
+import ViewCountBlockFromUtils from "../../../utils/ViewCountBlockFromUtils.jsx"
 
 const { getAllComments } = require("../../../features/comments/commentSlice.js")
 
@@ -17,8 +30,18 @@ const NewsById = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { isLoading, singleNews, message } = useSelector((state) => state.news)
+  const location = useLocation()
+  const linkSendToData = location.pathname.split("/")[1]
+  const { isLoading, singleArticle, message } = useSelector(
+    (state) => state.articleStore
+  )
   const [openCommentBox, setOpenCommentBox] = React.useState(false)
+
+  React.useEffect(() => {
+    if (location.state === "openCommentBox") {
+      setOpenCommentBox(true)
+    }
+  }, [location.state])
 
   const {
     commentsSlice_isError,
@@ -31,13 +54,15 @@ const NewsById = () => {
   const { user } = useSelector((state) => state.auth)
 
   React.useEffect(() => {
-    dispatch(getOneNewsById(id))
+    const data = { id, linkSendToData }
+    dispatch(getOneArticleById(data))
     dispatch(getAllComments(id))
   }, [dispatch, id, commentsSlice_isSuccess, navigate])
 
   const handleDelete = async (id) => {
-    await dispatch(deleteNews(id))
-    navigate("/news")
+    const data = { id, linkSendToData }
+    await dispatch(deleteArticle(data))
+    navigate("/news", { state: "/news" })
   }
 
   // snackbar
@@ -52,49 +77,86 @@ const NewsById = () => {
   }
 
   return (
-    <>
-      {isLoading ? (
-        <>Loading...</>
-      ) : (
-        <>
-          <Container maxWidth="lg">
-            <Paper sx={{ mt: 5, padding: 3 }}>
-              <NewsByIdMainContent singleNews={singleNews} />
-              <Box display={"flex"}>
-                <ViewsCommentCountBlock singleNews={singleNews} />
+    <Container maxWidth="lg">
+      <Paper sx={{ mt: 5, padding: 3 }}>
+        <Typography variant="caption" component={Link} to="/news">
+          News
+        </Typography>
 
+        {isLoading ? (
+          <Box sx={{ marginY: 2 }}>
+            <Stack direction="row" spacing={2} marginY={2}>
+              <Skeleton variant="circular">
+                <Avatar />
+              </Skeleton>
+              <Box width={"60%"}>
+                <Skeleton />
+                <Skeleton width={"50%"} />
+              </Box>
+            </Stack>
+
+            <Skeleton variant="rounded" width="100%" height={200} />
+          </Box>
+        ) : (
+          <>
+            <NewsByIdMainContent singleArticle={singleArticle} />
+            <Box display="flex" justifyContent="space-between">
+              <ViewCountBlockFromUtils singleArticle={singleArticle} />
+
+              {commentsSlice_commentsAll?.length === 0 ? (
                 <OpenCommentFormFromUtils
                   setOpenCommentBox={setOpenCommentBox}
                   openCommentBox={openCommentBox}
                 />
-
-                {user?.id === singleNews?.User?.id && (
-                  <UserTheSameDeleteEditBlockFromUtils
-                    handleDelete={handleDelete}
-                    id={id}
-                  />
-                )}
-              </Box>
-
-              {openCommentBox && <CommentCreate user={user} id={id} />}
-
-              {commentsSlice_commentsAll.length > 0 && (
-                <CommentsGetAll
-                  postId={id}
+              ) : (
+                <CommentCountBlockFromUtils
                   commentsSlice_commentsAll={commentsSlice_commentsAll}
+                  setOpenCommentBox={setOpenCommentBox}
+                  openCommentBox={openCommentBox}
+                />
+              )}
+
+              {user?.id === singleArticle?.User?.id && (
+                <UserTheSameDeleteEditBlockFromUtils
+                  handleDelete={handleDelete}
+                  link="news"
                   id={id}
                 />
               )}
-            </Paper>
-          </Container>
-        </>
+            </Box>
+          </>
+        )}
+
+        {/* ------------------------------------------------------ Comment Blog ------------------------------------------------------ */}
+
+        {commentsSlice_isLoading ? (
+          <Box marginY={2}>
+            <Skeleton width="100%" />
+            <Skeleton width="75%" />
+            <Skeleton width="50%" />
+          </Box>
+        ) : (
+          <>
+            {commentsSlice_commentsAll.length > 0 && (
+              <Divider sx={{ marginBottom: 2 }} />
+            )}
+            {openCommentBox && <CommentCreate user={user} id={id} />}
+            {commentsSlice_commentsAll.length > 0 && (
+              <CommentsGetAll
+                commentsSlice_commentsAll={commentsSlice_commentsAll}
+              />
+            )}
+          </>
+        )}
+      </Paper>
+      {location.pathname === location.state && message !== "" && (
+        <SnackbarFromUtils
+          openSnackbar={openSnackbar}
+          handleCloseSnackbar={handleCloseSnackbar}
+          message={message}
+        />
       )}
-      <SnackbarFromUtils
-        openSnackbar={openSnackbar}
-        handleCloseSnackbar={handleCloseSnackbar}
-        message={message}
-      />
-    </>
+    </Container>
   )
 }
 export default NewsById

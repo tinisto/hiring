@@ -1,9 +1,13 @@
-const { User, Question, Article } = require("../models")
+const { User, Question, Article, Comment } = require("../models")
 const { validationResult } = require("express-validator")
 const CategoryId = 3
 
 // createQuestion _____________________________________________________________________________________
 const createQuestion = async (req, res) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json(errors.array())
+  }
   const { title = "question", text } = req.body
   try {
     const result = await Article.create({
@@ -25,7 +29,7 @@ const getAllQuestion = async (req, res) => {
     result = await Article.findAll({
       where: { CategoryId },
       order: [["createdAt", "DESC"]],
-      include: User,
+      include: [User, Comment],
     })
     res.status(200).json(result)
   } catch (error) {
@@ -37,7 +41,7 @@ const getAllQuestion = async (req, res) => {
 // getOneQuestion _____________________________________________________________________________________
 const getOneQuestion = async (req, res) => {
   try {
-    result = await Article.findByPk(req.params.id, { include: User })
+    result = await Article.findByPk(req.params.id, { include: [User, Comment] })
     if (!result) {
       return res.status(400).json({ message: "Can't get a Question" })
     }
@@ -78,7 +82,11 @@ const removeQuestion = async (req, res) => {
 
 // editQuestion _____________________________________________________________________________________
 const editQuestion = async (req, res) => {
-  const { text } = req.body
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json(errors.array())
+  }
+  const { id, text } = req.body
   try {
     if (!text) {
       return res

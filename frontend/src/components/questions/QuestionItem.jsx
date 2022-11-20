@@ -1,23 +1,30 @@
 import {
-  Box,
   Card,
   CardActions,
   CardContent,
-  IconButton,
-  Tooltip,
+  Skeleton,
   Typography,
 } from "@mui/material"
-import { Edit, DeleteForever, ChatBubbleOutline } from "@mui/icons-material/"
 import { useNavigate } from "react-router-dom"
-import { deleteQuestion } from "../../features/questions/questionSlice"
 import { useDispatch } from "react-redux"
+import { deleteArticle } from "../../features/articles/articleSlice.js"
 import React from "react"
 import { Link, useLocation } from "react-router-dom"
+import UserTheSameDeleteEditBlockFromUtils from "../../utils/UserTheSameDeleteEditBlockFromUtils"
+import ItemOpenCommentFormFromUtils from "../../utils/forItems/ItemOpenCommentFormFromUtils.jsx"
+import ItemCommentCountBlockFromUtils from "../../utils/forItems/ItemCommentCountBlockFromUtils.jsx"
+import ViewCountBlockFromUtils from "../../utils/ViewCountBlockFromUtils"
 
-const QuestionItem = ({ oneQuestion, user }) => {
+const QuestionItem = ({ oneQuestion, user, id, isLoading }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const location = useLocation()
+
+  const handleDelete = async (id) => {
+    const data = { id, linkSendToData: "questions" }
+    await dispatch(deleteArticle(data))
+    navigate("/questions", { state: "/questions" })
+  }
 
   return (
     <>
@@ -36,59 +43,56 @@ const QuestionItem = ({ oneQuestion, user }) => {
       >
         {location.pathname === "/" && (
           <CardContent>
-            <Typography variant="caption" component={Link} to="/questions">
-              Questions
-            </Typography>
+            {isLoading ? (
+              <Skeleton />
+            ) : (
+              <Typography variant="caption" component={Link} to="/questions">
+                Questions
+              </Typography>
+            )}
           </CardContent>
         )}
         <CardContent component={Link} to={`/questions/${oneQuestion.id}`}>
-          <Typography variant="body2" color="text.secondary">
-            {oneQuestion.text}
-          </Typography>
+          {isLoading ? (
+            <>
+              <Skeleton />
+              <Skeleton />
+            </>
+          ) : (
+            <Typography variant="h6" color="text.secondary">
+              {oneQuestion.text}
+            </Typography>
+          )}
         </CardContent>
-        <CardActions>
-          {oneQuestion?.Comments?.length > 0 && (
-            <Box marginRight={"auto"}>
-              <Tooltip title="Comments" arrow>
-                <IconButton
-                  onClick={() => navigate(`/questions/${oneQuestion?.id}`)}
-                >
-                  <ChatBubbleOutline />
-                  <Typography ml={1} variant="body2">
-                    {oneQuestion?.Comments?.length === 0 ? (
-                      <></>
-                    ) : oneQuestion?.Comments?.length === 1 ? (
-                      `${oneQuestion?.Comments?.length} Comment`
-                    ) : (
-                      `${oneQuestion?.Comments?.length} Comments`
-                    )}
-                  </Typography>
-                </IconButton>
-              </Tooltip>
-            </Box>
-          )}
+        {isLoading ? (
+          <Skeleton width="60%" />
+        ) : (
+          <CardActions
+            sx={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <ViewCountBlockFromUtils singleArticle={oneQuestion} />
 
-          {user?.id === oneQuestion?.User?.id && (
-            <Box marginLeft={"auto"}>
-              <Tooltip title="Edit" arrow>
-                <IconButton
-                  color="warning"
-                  onClick={() => navigate(`/questions/edit/${oneQuestion?.id}`)}
-                >
-                  <Edit />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Delete" arrow>
-                <IconButton
-                  color="error"
-                  onClick={() => dispatch(deleteQuestion(oneQuestion.id))}
-                >
-                  <DeleteForever />
-                </IconButton>
-              </Tooltip>
-            </Box>
-          )}
-        </CardActions>
+            {oneQuestion?.Comments?.length === 0 ? (
+              <ItemOpenCommentFormFromUtils
+                link="questions"
+                singleArticle={oneQuestion}
+              />
+            ) : (
+              <ItemCommentCountBlockFromUtils
+                link="questions"
+                singleArticle={oneQuestion}
+              />
+            )}
+
+            {user?.id === oneQuestion?.User?.id && (
+              <UserTheSameDeleteEditBlockFromUtils
+                handleDelete={handleDelete}
+                link="questions"
+                id={oneQuestion?.id}
+              />
+            )}
+          </CardActions>
+        )}
       </Card>
     </>
   )

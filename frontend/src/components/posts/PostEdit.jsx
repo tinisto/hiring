@@ -1,40 +1,52 @@
 import { Box, Button, Stack, TextField, Typography } from "@mui/material"
 import React from "react"
-import { getOnePostById, editPost } from "../../features/posts/postSlice"
+import {
+  getOneArticleById,
+  editArticle,
+} from "../../features/articles/articleSlice.js"
 import { useSelector, useDispatch } from "react-redux"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams, useLocation } from "react-router-dom"
 
 const PostEdit = () => {
   const { id } = useParams()
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const location = useLocation()
+  const linkSendToData = location.pathname.split("/")[1]
   const { user } = useSelector((state) => state.auth)
+  const { singleArticle, isLoading } = useSelector(
+    (state) => state.articleStore
+  )
   const [formData, setFormdata] = React.useState({
     title: "",
     text: "",
   })
   const { title, text } = formData
-  const onSubmit = async (e) => {
+
+  React.useEffect(() => {
+    if (!user) {
+      navigate("/login")
+    }
+    if (isLoading) return "...Loading"
+    dispatch(getOneArticleById({ id, linkSendToData }))
+  }, [user, navigate, dispatch])
+
+  React.useEffect(() => {
+    if (singleArticle) {
+      setFormdata({ title: singleArticle.title, text: singleArticle.text })
+    }
+  }, [singleArticle])
+
+  const onSubmit = (e) => {
     e.preventDefault()
-    await dispatch(editPost(formData))
-    navigate(`/posts/${id}`)
+    dispatch(editArticle({ id, title, text, linkSendToData }))
+    navigate(`/posts/${id}`, { state: `/posts/${id}` })
   }
   const onChange = (e) => {
     const { name, value } = e.target
     setFormdata({ ...formData, [name]: value })
   }
 
-  const getData = async (id) => {
-    const response = await dispatch(getOnePostById(id))
-    setFormdata(response.payload)
-  }
-  React.useEffect(() => {
-    if (!user) {
-      navigate("/login")
-    }
-    getData(id)
-  }, [user, navigate, dispatch])
   return (
     <Box
       component="form"

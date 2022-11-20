@@ -2,7 +2,7 @@ import { Box, Button, Stack, TextField } from "@mui/material"
 
 const CommentEdit = ({ onSubmit, commentText, onChange, setOpenEditBox }) => {
   return (
-    <Box component={"form"} onSubmit={onSubmit}>
+    <Box component={"form"} onSubmit={onSubmit} sx={{ width: 1 }}>
       <TextField
         fullWidth
         margin="normal"
@@ -13,10 +13,11 @@ const CommentEdit = ({ onSubmit, commentText, onChange, setOpenEditBox }) => {
         onChange={onChange}
         autoFocus
         size="small"
+        multiline
       />
       <Stack direction="row" justifyContent={"center"} spacing={3} marginY={1}>
         <Button variant="contained" type="submit" size="small">
-          Submit
+          Update comment
         </Button>
         <Button
           color="error"

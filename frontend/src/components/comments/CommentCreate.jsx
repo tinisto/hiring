@@ -11,6 +11,7 @@ import {
 import { useSelector, useDispatch } from "react-redux"
 import { createComment } from "../../features/comments/commentSlice"
 import { useNavigate } from "react-router-dom"
+import PersonIcon from "@mui/icons-material/Person"
 
 const CommentCreate = ({ id, user }) => {
   const dispatch = useDispatch()
@@ -19,7 +20,7 @@ const CommentCreate = ({ id, user }) => {
   const [commentText, setCommentText] = React.useState("")
   const onSubmit = (e) => {
     e.preventDefault()
-    const sendData = { commentText, postId: id }
+    const sendData = { commentText: commentText.trim(), ArticleId: id }
     dispatch(createComment(sendData))
     setCommentText("")
   }
@@ -28,7 +29,6 @@ const CommentCreate = ({ id, user }) => {
   }
 
   React.useEffect(() => {
-    // dispatch(reset())
     if (!user) {
       navigate("/login")
     }
@@ -41,10 +41,12 @@ const CommentCreate = ({ id, user }) => {
       onSubmit={onSubmit}
       width="85%"
       margin="auto"
-      marginTop={5}
+      marginTop={2}
       alignItems={"center"}
     >
-      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+      <Avatar>
+        <PersonIcon />
+      </Avatar>
 
       <TextField
         fullWidth
@@ -57,7 +59,9 @@ const CommentCreate = ({ id, user }) => {
         onChange={onChange}
         autoFocus
         size="small"
+        multiline
       />
+      <Button type="submit">submit</Button>
     </Stack>
   )
 }

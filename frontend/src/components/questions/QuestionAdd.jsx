@@ -1,16 +1,18 @@
 import { Alert, Box, Button, TextField, Typography } from "@mui/material"
 import React from "react"
-import { createQuestion, reset } from "../../features/questions/questionSlice"
+import { createArticle, reset } from "../../features/articles/articleSlice"
 import { useSelector, useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 
 const QuestionAdd = () => {
+  const location = useLocation()
+  const urlLink = location.pathname.split("/")[1]
   const [alertState, setAlertState] = React.useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.auth)
-  const { isErrorQuestion, messageQuestion, isSuccessQuestion } = useSelector(
-    (state) => state.questions
+  const { isError, message, isSuccess } = useSelector(
+    (state) => state.articleStore
   )
 
   const [formData, setFormdata] = React.useState({
@@ -20,11 +22,11 @@ const QuestionAdd = () => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-
-    dispatch(createQuestion(formData))
-
-    if (isSuccessQuestion) {
-      navigate("/questions")
+    const newFormData = { text, urlLink }
+    dispatch(createArticle(newFormData))
+    if (isSuccess) {
+      // dispatch(reset())
+      navigate("/questions", { state: "/questions" })
     }
   }
   const onChange = (e) => {
@@ -32,14 +34,13 @@ const QuestionAdd = () => {
     setFormdata({ ...formData, [name]: value })
   }
   React.useEffect(() => {
-    // dispatch(reset())
     if (!user) {
       navigate("/login")
     }
-    if (isErrorQuestion) {
+    if (isError) {
       setAlertState(true)
     }
-  }, [user, navigate, isErrorQuestion, reset, dispatch])
+  }, [user, navigate, isError, reset, dispatch, isSuccess])
 
   return (
     <Box
@@ -67,7 +68,7 @@ const QuestionAdd = () => {
       />
       {alertState ? (
         <Alert variant="filled" severity="error">
-          {messageQuestion}
+          {message}
         </Alert>
       ) : (
         <></>

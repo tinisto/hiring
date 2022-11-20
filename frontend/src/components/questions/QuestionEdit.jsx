@@ -1,42 +1,47 @@
 import { Box, Button, Stack, TextField, Typography } from "@mui/material"
 import React from "react"
 import {
-  getOneQuestionById,
-  editQuestion,
-} from "../../features/questions/questionSlice"
+  getOneArticleById,
+  editArticle,
+} from "../../features/articles/articleSlice.js"
 import { useSelector, useDispatch } from "react-redux"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams, useLocation } from "react-router-dom"
 
 const QuestionEdit = () => {
   const { id } = useParams()
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const location = useLocation()
+  const linkSendToData = location.pathname.split("/")[1]
   const { user } = useSelector((state) => state.auth)
-  const [formData, setFormdata] = React.useState({
-    text: "",
-  })
-  const { text } = formData
-  const onSubmit = async (e) => {
-    e.preventDefault()
-    await dispatch(editQuestion(formData))
-    navigate(`/questions/${id}`)
-  }
-  const onChange = (e) => {
-    const { name, value } = e.target
-    setFormdata({ ...formData, [name]: value })
-  }
+  const { singleArticle, isLoading } = useSelector(
+    (state) => state.articleStore
+  )
+  const [text, setText] = React.useState("")
 
-  const getData = async (id) => {
-    const response = await dispatch(getOneQuestionById(id))
-    setFormdata(response.payload)
-  }
   React.useEffect(() => {
     if (!user) {
       navigate("/login")
     }
-    getData(id)
+    if (isLoading) return "...Loading"
+    dispatch(getOneArticleById({ id, linkSendToData }))
   }, [user, navigate, dispatch])
+
+  React.useEffect(() => {
+    if (singleArticle) {
+      setText(singleArticle.text)
+    }
+  }, [singleArticle])
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+    dispatch(editArticle({ id, text, linkSendToData }))
+    navigate(`/questions/${id}`, { state: `/questions/${id}` })
+  }
+  const onChange = (e) => {
+    setText(e.target.value)
+  }
+
   return (
     <Box
       component="form"

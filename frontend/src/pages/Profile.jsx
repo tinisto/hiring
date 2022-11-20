@@ -6,13 +6,11 @@ import {
   Button,
   Container,
   IconButton,
-  Paper,
   Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   TextField,
   Typography,
@@ -182,45 +180,6 @@ const Profile = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Stack
-        direction="row"
-        alignItems="center"
-        spacing={2}
-        component="form"
-        onSubmit={onSubmitImage}
-      >
-        <Button variant="contained" component="label">
-          Upload
-          <input
-            hidden
-            accept="image/*"
-            multiple
-            type="file"
-            onChange={imageChange}
-          />
-        </Button>
-        <IconButton
-          color="primary"
-          aria-label="upload picture"
-          component="label"
-        >
-          <input hidden accept="image/*" type="file" onChange={imageChange} />
-          <PhotoCamera />
-        </IconButton>
-        <Button type="submit">Upload picture</Button>
-      </Stack>
-      {selectedImage && (
-        <div style={styles.preview}>
-          <img
-            src={URL.createObjectURL(selectedImage)}
-            style={styles.image}
-            alt="Thumb"
-          />
-          <button onClick={removeSelectedImage} style={styles.delete}>
-            Remove This Image
-          </button>
-        </div>
-      )}
     </Container>
   )
 }

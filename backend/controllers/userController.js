@@ -30,6 +30,7 @@ const registerUser = async (req, res) => {
       })
 
       res.status(200).json({
+        id: result.id,
         firstName: result.firstName,
         lastName: result.lastName,
         email: result.email,
@@ -100,8 +101,8 @@ const updateUser = async (req, res) => {
       })
 
       res.status(200).json({
+        id: updateUser.id,
         firstName: updateUser.firstName,
-
         lastName: updateUser.lastName,
         email: updateUser.email,
         createdAt: updateUser.createdAt,

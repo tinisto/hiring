@@ -1,19 +1,28 @@
-import { Box, Container, Paper } from "@mui/material"
+import {
+  Avatar,
+  Box,
+  Container,
+  Divider,
+  Paper,
+  Skeleton,
+  Stack,
+  Typography,
+} from "@mui/material"
 import React from "react"
 import {
-  getOnePostById,
-  deletePost,
-  reset,
-} from "../../../features/posts/postSlice"
+  getOneArticleById,
+  deleteArticle,
+} from "../../../features/articles/articleSlice.js"
 import { useSelector, useDispatch } from "react-redux"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams, useLocation, Link } from "react-router-dom"
 import CommentCreate from "../../comments/CommentCreate"
 import CommentsGetAll from "../../comments/CommentsGetAll"
 import PostByIdMainContent from "./PostByIdMainContent"
 import SnackbarFromUtils from "../../../utils/SnackbarFromUtils"
 import UserTheSameDeleteEditBlockFromUtils from "../../../utils/UserTheSameDeleteEditBlockFromUtils"
 import OpenCommentFormFromUtils from "../../../utils/OpenCommentFormFromUtils"
-import ViewsCommentCountBlock from "../../../utils/ViewCountBlockFromUtils"
+import CommentCountBlockFromUtils from "../../../utils/CommentCountBlockFromUtils.jsx"
+import ViewCountBlockFromUtils from "../../../utils/ViewCountBlockFromUtils"
 
 const { getAllComments } = require("../../../features/comments/commentSlice.js")
 
@@ -21,8 +30,18 @@ const DiaryById = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { isLoading, singlePost, message } = useSelector((state) => state.posts)
+  const location = useLocation()
+  const linkSendToData = location.pathname.split("/")[1]
+  const { isLoading, singleArticle, message } = useSelector(
+    (state) => state.articleStore
+  )
   const [openCommentBox, setOpenCommentBox] = React.useState(false)
+
+  React.useEffect(() => {
+    if (location.state === "openCommentBox") {
+      setOpenCommentBox(true)
+    }
+  }, [location.state])
 
   const {
     commentsSlice_isError,
@@ -35,13 +54,15 @@ const DiaryById = () => {
   const { user } = useSelector((state) => state.auth)
 
   React.useEffect(() => {
-    dispatch(getOnePostById(id))
+    const data = { id, linkSendToData }
+    dispatch(getOneArticleById(data))
     dispatch(getAllComments(id))
   }, [dispatch, id, commentsSlice_isSuccess, navigate])
 
   const handleDelete = async (id) => {
-    await dispatch(deletePost(id))
-    navigate("/posts")
+    const data = { id, linkSendToData }
+    await dispatch(deleteArticle(data))
+    navigate("/posts", { state: "/posts" })
   }
 
   // snackbar
@@ -56,49 +77,86 @@ const DiaryById = () => {
   }
 
   return (
-    <>
-      {isLoading ? (
-        <>Loading...</>
-      ) : (
-        <>
-          <Container maxWidth="lg">
-            <Paper sx={{ mt: 5, padding: 3 }}>
-              <PostByIdMainContent singlePost={singlePost} />
-              <Box display={"flex"}>
-                <ViewsCommentCountBlock singlePost={singlePost} />
+    <Container maxWidth="lg">
+      <Paper sx={{ mt: 5, padding: 3 }}>
+        <Typography variant="caption" component={Link} to="/posts">
+          Posts
+        </Typography>
 
+        {isLoading ? (
+          <Box sx={{ marginY: 2 }}>
+            <Stack direction="row" spacing={2} marginY={2}>
+              <Skeleton variant="circular">
+                <Avatar />
+              </Skeleton>
+              <Box width={"60%"}>
+                <Skeleton />
+                <Skeleton width={"50%"} />
+              </Box>
+            </Stack>
+
+            <Skeleton variant="rounded" width="100%" height={200} />
+          </Box>
+        ) : (
+          <>
+            <PostByIdMainContent singleArticle={singleArticle} />
+            <Box display="flex" justifyContent="space-between">
+              <ViewCountBlockFromUtils singleArticle={singleArticle} />
+
+              {commentsSlice_commentsAll?.length === 0 ? (
                 <OpenCommentFormFromUtils
                   setOpenCommentBox={setOpenCommentBox}
                   openCommentBox={openCommentBox}
                 />
-
-                {user?.id === singlePost?.User?.id && (
-                  <UserTheSameDeleteEditBlockFromUtils
-                    handleDelete={handleDelete}
-                    id={id}
-                  />
-                )}
-              </Box>
-
-              {openCommentBox && <CommentCreate user={user} id={id} />}
-
-              {commentsSlice_commentsAll.length > 0 && (
-                <CommentsGetAll
-                  postId={id}
+              ) : (
+                <CommentCountBlockFromUtils
                   commentsSlice_commentsAll={commentsSlice_commentsAll}
+                  setOpenCommentBox={setOpenCommentBox}
+                  openCommentBox={openCommentBox}
+                />
+              )}
+
+              {user?.id === singleArticle?.User?.id && (
+                <UserTheSameDeleteEditBlockFromUtils
+                  handleDelete={handleDelete}
+                  link="posts"
                   id={id}
                 />
               )}
-            </Paper>
-          </Container>
-        </>
+            </Box>
+          </>
+        )}
+
+        {/* ------------------------------------------------------ Comment Blog ------------------------------------------------------ */}
+
+        {commentsSlice_isLoading ? (
+          <Box marginY={2}>
+            <Skeleton width="100%" />
+            <Skeleton width="75%" />
+            <Skeleton width="50%" />
+          </Box>
+        ) : (
+          <>
+            {commentsSlice_commentsAll.length > 0 && (
+              <Divider sx={{ marginBottom: 2 }} />
+            )}
+            {openCommentBox && <CommentCreate user={user} id={id} />}
+            {commentsSlice_commentsAll.length > 0 && (
+              <CommentsGetAll
+                commentsSlice_commentsAll={commentsSlice_commentsAll}
+              />
+            )}
+          </>
+        )}
+      </Paper>
+      {location.pathname === location.state && message !== "" && (
+        <SnackbarFromUtils
+          openSnackbar={openSnackbar}
+          handleCloseSnackbar={handleCloseSnackbar}
+          message={message}
+        />
       )}
-      <SnackbarFromUtils
-        openSnackbar={openSnackbar}
-        handleCloseSnackbar={handleCloseSnackbar}
-        message={message}
-      />
-    </>
+    </Container>
   )
 }
 export default DiaryById

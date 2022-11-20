@@ -7,8 +7,6 @@ module.exports = (sequelize, Datatypes) => {
   })
   Comment.associate = (models) => {
     Comment.belongsTo(models.User, { onDelete: "CASCADE" })
-    Comment.belongsTo(models.Post, { onDelete: "CASCADE" })
-    Comment.belongsTo(models.Category)
   }
 
   return Comment

@@ -1,32 +1,41 @@
 import NewsItem from "./NewsItem"
 import { useSelector, useDispatch } from "react-redux"
-import { getAllNews } from "../../features/news/newsSlice"
+import { getArticlesByCategory } from "../../features/articles/articleSlice"
 import React from "react"
 import { Box, Container, Typography } from "@mui/material"
 import SnackbarFromUtils from "../../utils/SnackbarFromUtils"
+import { useLocation } from "react-router-dom"
 
 const NewsAll = () => {
-  const { allNews, message } = useSelector((state) => state.news)
+  const location = useLocation()
+  const urlLink = location.pathname.split("/")[1]
+  const { articles, message, isLoading } = useSelector(
+    (state) => state.articleStore
+  )
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
 
   React.useEffect(() => {
-    dispatch(getAllNews())
+    dispatch(getArticlesByCategory(urlLink))
   }, [dispatch])
 
   // snackbar
-  React.useEffect(() => {
-    if (message) {
-      setOpenSnackbar(true)
-    }
-  }, [message])
   const [openSnackbar, setOpenSnackbar] = React.useState(false)
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false)
   }
+  React.useEffect(() => {
+    if (message) {
+      setOpenSnackbar(true)
+    }
+    if (isLoading) {
+      setOpenSnackbar(false)
+    }
+  }, [message, isLoading])
+
   return (
     <Container maxWidth="lg">
-      {allNews.length ? (
+      {articles.length ? (
         <Box>
           <Typography
             textAlign="center"
@@ -38,8 +47,15 @@ const NewsAll = () => {
             News
           </Typography>
 
-          {allNews.map((oneNews) => (
-            <NewsItem key={oneNews.id} oneNews={oneNews} user={user} />
+          {articles.map((oneNews) => (
+            <NewsItem
+              key={oneNews.id}
+              oneNews={oneNews}
+              user={user}
+              message={message}
+              id={oneNews.id}
+              isLoading={isLoading}
+            />
           ))}
         </Box>
       ) : (
@@ -51,11 +67,13 @@ const NewsAll = () => {
           </Box>
         </>
       )}
-      <SnackbarFromUtils
-        openSnackbar={openSnackbar}
-        handleCloseSnackbar={handleCloseSnackbar}
-        message={message}
-      />
+      {location.pathname === location.state && message !== "" && (
+        <SnackbarFromUtils
+          openSnackbar={openSnackbar}
+          handleCloseSnackbar={handleCloseSnackbar}
+          message={message}
+        />
+      )}
     </Container>
   )
 }

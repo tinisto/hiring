@@ -5,16 +5,14 @@ import { useSelector, useDispatch } from "react-redux"
 import { getAllArticle } from "../features/articles/articleSlice"
 import React from "react"
 import { Box, Container, Typography } from "@mui/material"
-import { useLocation } from "react-router-dom"
 
 const Home = () => {
-  const location = useLocation()
   const { articles } = useSelector((state) => state.articleStore)
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
 
   React.useEffect(() => {
-    dispatch(getAllArticle({ urlLink: location.pathname }))
+    dispatch(getAllArticle())
   }, [dispatch])
 
   const switchByCategoryId = (item) => {

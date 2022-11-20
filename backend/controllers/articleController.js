@@ -2,7 +2,6 @@ const { User, Post, Comment, Article } = require("../models")
 
 // getAllArticle _____________________________________________________________________________________
 const getAllArticle = async (req, res) => {
-  console.log("nnnnnnnn")
   try {
     result = await Article.findAll({
       order: [["createdAt", "DESC"]],

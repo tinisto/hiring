@@ -1,32 +1,41 @@
 import QuestionItem from "./QuestionItem"
 import { useSelector, useDispatch } from "react-redux"
-import { getAllQuestion } from "../../features/questions/questionSlice"
+import { getArticlesByCategory } from "../../features/articles/articleSlice"
 import React from "react"
 import { Box, Container, Typography } from "@mui/material"
-import QuestionSnackbar from "./QuestionSnackbar"
+import { useLocation } from "react-router-dom"
+import SnackbarFromUtils from "../../utils/SnackbarFromUtils"
 
 const QuestionAll = () => {
-  const { allQuestions, messageQuestion } = useSelector(
-    (state) => state.questions
+  const location = useLocation()
+  const urlLink = location.pathname.split("/")[1]
+  const { articles, message, isLoading } = useSelector(
+    (state) => state.articleStore
   )
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
 
   React.useEffect(() => {
-    dispatch(getAllQuestion())
+    dispatch(getArticlesByCategory(urlLink))
+    // dispatch(reset())
   }, [dispatch])
+
+  // snackbar
   React.useEffect(() => {
-    if (messageQuestion) {
+    if (message) {
       setOpenSnackbar(true)
     }
-  }, [messageQuestion])
+    if (isLoading) {
+      setOpenSnackbar(false)
+    }
+  }, [message, isLoading])
   const [openSnackbar, setOpenSnackbar] = React.useState(false)
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false)
   }
   return (
     <Container maxWidth="lg">
-      {allQuestions.length ? (
+      {articles.length ? (
         <Box>
           <Typography
             textAlign="center"
@@ -37,12 +46,15 @@ const QuestionAll = () => {
           >
             Questions
           </Typography>
-          {allQuestions.map((oneQuestion) => (
+
+          {articles.map((oneQuestion) => (
             <QuestionItem
               key={oneQuestion.id}
               oneQuestion={oneQuestion}
               user={user}
-              messageQuestion={messageQuestion}
+              message={message}
+              id={oneQuestion.id}
+              isLoading={isLoading}
             />
           ))}
         </Box>
@@ -55,11 +67,13 @@ const QuestionAll = () => {
           </Box>
         </>
       )}
-      <QuestionSnackbar
-        openSnackbar={openSnackbar}
-        handleCloseSnackbar={handleCloseSnackbar}
-        messageQuestion={messageQuestion}
-      />
+      {location.pathname === location.state && message !== "" && (
+        <SnackbarFromUtils
+          openSnackbar={openSnackbar}
+          handleCloseSnackbar={handleCloseSnackbar}
+          message={message}
+        />
+      )}
     </Container>
   )
 }

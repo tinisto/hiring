@@ -1,9 +1,13 @@
-const { User, News, Article } = require("../models")
+const { User, News, Article, Comment } = require("../models")
 const { validationResult } = require("express-validator")
 const CategoryId = 2
 
 // create News
 const createNews = async (req, res) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json(errors.array())
+  }
   const { title, text } = req.body
   try {
     const result = await Article.create({
@@ -24,8 +28,7 @@ const getAllNews = async (req, res) => {
     result = await Article.findAll({
       where: { CategoryId },
       order: [["createdAt", "DESC"]],
-      //   include: [User, Comment],
-      include: User,
+      include: [User, Comment],
     })
     res.status(200).json(result)
   } catch (error) {
@@ -37,7 +40,7 @@ const getAllNews = async (req, res) => {
 // getOneNews _____________________________________________________________________________________
 const getOneNews = async (req, res) => {
   try {
-    result = await Article.findByPk(req.params.id, { include: User })
+    result = await Article.findByPk(req.params.id, { include: [User, Comment] })
     if (!result) {
       return res.status(400).json({ message: "Can't get a News" })
     }
@@ -76,7 +79,11 @@ const removeNews = async (req, res) => {
 
 // editNews _____________________________________________________________________________________
 const editNews = async (req, res) => {
-  const { title, text } = req.body
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json(errors.array())
+  }
+  const { id, title, text } = req.body
   try {
     if (!title || !text) {
       return res

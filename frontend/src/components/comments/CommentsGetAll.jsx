@@ -1,13 +1,13 @@
 import { Typography } from "@mui/material"
 import CommentItem from "./CommentItem"
 
-const CommentsGetAll = ({ id, commentsSlice_commentsAll, postId }) => {
+const CommentsGetAll = ({ commentsSlice_commentsAll }) => {
   return (
     <>
       {commentsSlice_commentsAll.length ? (
         <>
           {commentsSlice_commentsAll.map((item) => (
-            <CommentItem key={item.id} item={item} postId={postId} />
+            <CommentItem key={item.id} item={item} ArticleId={item.ArticleId} />
           ))}
         </>
       ) : (
