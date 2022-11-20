@@ -1,4 +1,5 @@
 import {
+  Box,
   Card,
   CardActions,
   CardContent,
@@ -51,15 +52,37 @@ const QuestionItem = ({ oneQuestion, user, id, isLoading }) => {
           )}
         </CardContent>
       )}
-      <CardContent component={Link} to={`/questions/${oneQuestion.id}`}>
+      <CardContent
+        component={Link}
+        to={`/questions/${oneQuestion.id}`}
+        style={{ textDecoration: "none" }}
+      >
         {isLoading ? (
           <>
             <Skeleton />
             <Skeleton />
           </>
         ) : (
-          <Typography variant="h6" color="text.secondary">
-            {oneQuestion.text}
+          <Typography
+            style={{ whiteSpace: "pre-wrap" }}
+            variant="h6"
+            color="text.secondary"
+          >
+            <Box component="span" sx={{ opacity: 1 }} display="inline">
+              {oneQuestion?.text?.slice(0, 100)}
+            </Box>
+            <Box component="span" sx={{ opacity: 0.8 }} display="inline">
+              {oneQuestion?.text?.slice(100, 200)}
+            </Box>
+            <Box component="span" sx={{ opacity: 0.6 }} display="inline">
+              {oneQuestion?.text?.slice(200, 300)}
+            </Box>
+            <Box component="span" sx={{ opacity: 0.4 }} display="inline">
+              {oneQuestion?.text?.slice(300, 400)}
+            </Box>
+            <Box component="span" sx={{ opacity: 0.2 }} display="inline">
+              {oneQuestion?.text?.slice(400, 500)}
+            </Box>
           </Typography>
         )}
       </CardContent>

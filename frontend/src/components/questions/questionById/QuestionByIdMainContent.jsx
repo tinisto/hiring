@@ -15,7 +15,12 @@ const QuestionByIdMainContent = ({ singleArticle }) => {
           Published: {new Date(singleArticle?.createdAt).toLocaleString()}
         </Typography>
       </Stack>
-      <Typography variant="h5" color="inherit" paragraph>
+      <Typography
+        style={{ whiteSpace: "pre-wrap" }}
+        variant="h5"
+        color="inherit"
+        paragraph
+      >
         {singleArticle?.text}
       </Typography>
     </>

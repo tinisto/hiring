@@ -18,7 +18,12 @@ const NewsByIdMainContent = ({ singleArticle }) => {
       <Typography component="h1" variant="h3">
         {singleArticle?.title}
       </Typography>
-      <Typography variant="h5" color="inherit" paragraph>
+      <Typography
+        style={{ whiteSpace: "pre-wrap" }}
+        variant="h5"
+        color="inherit"
+        paragraph
+      >
         {singleArticle?.text}
       </Typography>
     </>

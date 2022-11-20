@@ -1,4 +1,5 @@
 import {
+  Box,
   Card,
   CardActions,
   CardContent,
@@ -52,7 +53,11 @@ const PostItem = ({ post, user, id, isLoading }) => {
             )}
           </CardContent>
         )}
-        <CardContent component={Link} to={`/posts/${post.id}`}>
+        <CardContent
+          component={Link}
+          to={`/posts/${post.id}`}
+          style={{ textDecoration: "none" }}
+        >
           {isLoading ? (
             <Skeleton />
           ) : (
@@ -66,9 +71,29 @@ const PostItem = ({ post, user, id, isLoading }) => {
               <Skeleton />
             </>
           ) : (
-            <Typography variant="body2" color="text.secondary">
-              {post.text}
-            </Typography>
+            <>
+              <Typography
+                style={{ whiteSpace: "pre-wrap" }}
+                variant="body2"
+                color="text.secondary"
+              >
+                <Box component="span" sx={{ opacity: 1 }} display="inline">
+                  {post?.text?.slice(0, 100)}
+                </Box>
+                <Box component="span" sx={{ opacity: 0.8 }} display="inline">
+                  {post?.text?.slice(100, 200)}
+                </Box>
+                <Box component="span" sx={{ opacity: 0.6 }} display="inline">
+                  {post?.text?.slice(200, 300)}
+                </Box>
+                <Box component="span" sx={{ opacity: 0.4 }} display="inline">
+                  {post?.text?.slice(300, 400)}
+                </Box>
+                <Box component="span" sx={{ opacity: 0.2 }} display="inline">
+                  {post?.text?.slice(400, 500)}
+                </Box>
+              </Typography>
+            </>
           )}
         </CardContent>
         {isLoading ? (

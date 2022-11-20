@@ -53,7 +53,11 @@ const NewsItem = ({ oneNews, user, id, isLoading }) => {
             )}
           </CardContent>
         )}
-        <CardContent component={Link} to={`/news/${oneNews.id}`}>
+        <CardContent
+          component={Link}
+          to={`/news/${oneNews.id}`}
+          style={{ textDecoration: "none" }}
+        >
           {isLoading ? (
             <Skeleton />
           ) : (
@@ -67,8 +71,26 @@ const NewsItem = ({ oneNews, user, id, isLoading }) => {
               <Skeleton />
             </>
           ) : (
-            <Typography variant="body2" color="text.secondary">
-              {oneNews.text}
+            <Typography
+              style={{ whiteSpace: "pre-wrap" }}
+              variant="body2"
+              color="text.secondary"
+            >
+              <Box component="span" sx={{ opacity: 1 }} display="inline">
+                {oneNews?.text?.slice(0, 100)}
+              </Box>
+              <Box component="span" sx={{ opacity: 0.8 }} display="inline">
+                {oneNews?.text?.slice(100, 200)}
+              </Box>
+              <Box component="span" sx={{ opacity: 0.6 }} display="inline">
+                {oneNews?.text?.slice(200, 300)}
+              </Box>
+              <Box component="span" sx={{ opacity: 0.4 }} display="inline">
+                {oneNews?.text?.slice(300, 400)}
+              </Box>
+              <Box component="span" sx={{ opacity: 0.2 }} display="inline">
+                {oneNews?.text?.slice(400, 500)}
+              </Box>
             </Typography>
           )}
         </CardContent>
