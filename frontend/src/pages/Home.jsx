@@ -35,7 +35,7 @@ const Home = () => {
         <>
           <Box>
             <Typography marginTop={3} textAlign={"center"} variant="h6">
-              No articles yet
+              No Articles yet
             </Typography>
           </Box>
         </>

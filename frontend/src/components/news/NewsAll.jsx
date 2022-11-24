@@ -63,7 +63,7 @@ const NewsAll = () => {
         <>
           <Box>
             <Typography marginTop={3} textAlign={"center"} variant="h6">
-              No news yet
+              No News yet
             </Typography>
           </Box>
         </>

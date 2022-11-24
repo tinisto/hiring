@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Typography } from "@mui/material"
+import { Alert, Box, Button, Stack, Typography } from "@mui/material"
 import React from "react"
 import { createArticle, reset } from "../../features/articles/articleSlice"
 import { useSelector, useDispatch } from "react-redux"
@@ -48,7 +48,14 @@ const PostAdd = () => {
       marginTop={3}
       alignItems="center"
     >
-      <Typography variant="h5">Create your story</Typography>
+      <Typography
+        variant="h5"
+        marginBottom={2}
+        textAlign="center"
+        fontWeight={500}
+      >
+        Create your story
+      </Typography>
       <ReactQuill
         theme="snow"
         value={value}
@@ -62,14 +69,20 @@ const PostAdd = () => {
       ) : (
         <></>
       )}
-      <Button
-        variant="contained"
-        type="submit"
-        color="warning"
-        sx={{ marginTop: 3, borderRadius: 3 }}
-      >
-        Submit
-      </Button>
+
+      <Stack spacing={2} direction="row" justifyContent="center" marginTop={3}>
+        <Button variant="contained" type="submit" size="small">
+          Submit
+        </Button>
+        <Button
+          onClick={() => navigate(-1)}
+          variant="contained"
+          size="small"
+          color="error"
+        >
+          Cancel
+        </Button>
+      </Stack>
     </Box>
   )
 }

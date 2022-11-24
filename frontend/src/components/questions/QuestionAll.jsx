@@ -62,7 +62,7 @@ const QuestionAll = () => {
         <>
           <Box>
             <Typography marginTop={3} textAlign={"center"} variant="h6">
-              No questions yet
+              No Questions yet
             </Typography>
           </Box>
         </>

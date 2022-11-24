@@ -61,7 +61,7 @@ const PostAll = () => {
         <>
           <Box>
             <Typography marginTop={3} textAlign={"center"} variant="h6">
-              No posts yet
+              No Posts yet
             </Typography>
           </Box>
         </>
