@@ -23,6 +23,7 @@ import UserTheSameDeleteEditBlockFromUtils from "../../../utils/UserTheSameDelet
 import OpenCommentFormFromUtils from "../../../utils/OpenCommentFormFromUtils"
 import CommentCountBlockFromUtils from "../../../utils/CommentCountBlockFromUtils.jsx"
 import ViewCountBlockFromUtils from "../../../utils/ViewCountBlockFromUtils"
+import NotFoundPage from "../../../pages/NotFoundPage"
 
 const { getAllComments } = require("../../../features/comments/commentSlice.js")
 
@@ -32,7 +33,7 @@ const PostById = () => {
   const dispatch = useDispatch()
   const location = useLocation()
   const linkSendToData = location.pathname.split("/")[1]
-  const { isLoading, singleArticle, message } = useSelector(
+  const { isLoading, singleArticle, message, isError } = useSelector(
     (state) => state.articleStore
   )
   const [openCommentBox, setOpenCommentBox] = React.useState(false)
@@ -75,6 +76,7 @@ const PostById = () => {
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false)
   }
+  // if (isError) return <NotFoundPage />
 
   return (
     <Container maxWidth="lg">

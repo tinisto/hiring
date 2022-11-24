@@ -1,4 +1,4 @@
-import { Box, Button, Stack, TextField, Typography } from "@mui/material"
+import { Box, Button, Stack, Typography } from "@mui/material"
 import React from "react"
 import {
   getOneArticleById,
@@ -6,6 +6,7 @@ import {
 } from "../../features/articles/articleSlice.js"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate, useParams, useLocation } from "react-router-dom"
+import ReactQuill from "react-quill"
 
 const PostEdit = () => {
   const { id } = useParams()
@@ -17,11 +18,6 @@ const PostEdit = () => {
   const { singleArticle, isLoading } = useSelector(
     (state) => state.articleStore
   )
-  const [formData, setFormdata] = React.useState({
-    title: "",
-    text: "",
-  })
-  const { title, text } = formData
 
   React.useEffect(() => {
     if (!user) {
@@ -33,53 +29,29 @@ const PostEdit = () => {
 
   React.useEffect(() => {
     if (singleArticle) {
-      setFormdata({ title: singleArticle.title, text: singleArticle.text })
+      setValue(singleArticle.text)
     }
   }, [singleArticle])
 
   const onSubmit = (e) => {
     e.preventDefault()
-    dispatch(editArticle({ id, title, text, linkSendToData }))
+    const result = value.replace(/(<p><br><\/p>)/g, "")
+    const result1 = result.replace(/(<\/p><p>)/g, "<br>")
+    dispatch(editArticle({ id, text: result1, linkSendToData }))
     navigate(`/posts/${id}`, { state: `/posts/${id}` })
   }
-  const onChange = (e) => {
-    const { name, value } = e.target
-    setFormdata({ ...formData, [name]: value })
-  }
+  const [value, setValue] = React.useState("")
 
   return (
     <Box
       component="form"
       onSubmit={onSubmit}
-      display="flex"
-      flexDirection={"column"}
-      width="75%"
       margin="auto"
       marginTop={3}
       alignItems="center"
     >
       <Typography variant="h5">Edit your story</Typography>
-      <TextField
-        fullWidth
-        margin="normal"
-        variant="outlined"
-        label="Title"
-        type="text"
-        name="title"
-        value={title}
-        onChange={onChange}
-      />
-      <TextField
-        fullWidth
-        margin="normal"
-        variant="outlined"
-        label="Text"
-        type="text"
-        name="text"
-        value={text}
-        onChange={onChange}
-        multiline
-      />
+      <ReactQuill theme="snow" value={value} onChange={setValue} />
       <Stack direction="row" spacing={2} marginTop={3}>
         <Button variant="contained" type="submit" color="warning">
           Submit

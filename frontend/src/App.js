@@ -13,6 +13,7 @@ import { Routes, Route } from "react-router-dom"
 import Profile from "./pages/Profile"
 import About from "./pages/About"
 import Layout from "./components/Layout"
+import NotFoundPage from "./pages/NotFoundPage"
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="/questions/:id" element={<QuestionById />} />
           <Route path="/questions/edit/:id" element={<QuestionEdit />} />
           <Route path="/questions/add" element={<QuestionAdd />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </>

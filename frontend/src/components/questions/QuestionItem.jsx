@@ -1,11 +1,4 @@
-import {
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  Skeleton,
-  Typography,
-} from "@mui/material"
+import { Box, Card, CardActions, Skeleton, Typography } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { deleteArticle } from "../../features/articles/articleSlice.js"
@@ -15,6 +8,8 @@ import UserTheSameDeleteEditBlockFromUtils from "../../utils/UserTheSameDeleteEd
 import ItemOpenCommentFormFromUtils from "../../utils/forItems/ItemOpenCommentFormFromUtils.jsx"
 import ItemCommentCountBlockFromUtils from "../../utils/forItems/ItemCommentCountBlockFromUtils.jsx"
 import ViewCountBlockFromUtils from "../../utils/ViewCountBlockFromUtils"
+import parse from "html-react-parser"
+import { v4 } from "uuid"
 
 const QuestionItem = ({ oneQuestion, user, id, isLoading }) => {
   const navigate = useNavigate()
@@ -27,13 +22,16 @@ const QuestionItem = ({ oneQuestion, user, id, isLoading }) => {
     navigate("/questions", { state: "/questions" })
   }
 
+  const split_string = oneQuestion?.text?.split("<br>")
+  let i = 1.2
+
   return (
     <Card
       sx={{
         width: "75%",
         height: "75%",
         margin: "auto",
-        padding: 1,
+        paddingX: 2,
         boxShadow: "5px 5px 10px #ccc",
         marginBottom: 3,
         ":hover": {
@@ -42,7 +40,7 @@ const QuestionItem = ({ oneQuestion, user, id, isLoading }) => {
       }}
     >
       {location.pathname === "/" && (
-        <CardContent>
+        <Box sx={{ marginY: 2 }}>
           {isLoading ? (
             <Skeleton />
           ) : (
@@ -50,46 +48,38 @@ const QuestionItem = ({ oneQuestion, user, id, isLoading }) => {
               Questions
             </Typography>
           )}
-        </CardContent>
+        </Box>
       )}
-      <CardContent
+      <Box
         component={Link}
         to={`/questions/${oneQuestion.id}`}
-        style={{ textDecoration: "none" }}
+        style={{
+          textDecoration: "none",
+          color: "black",
+        }}
       >
-        {isLoading ? (
+        {oneQuestion.text && (
           <>
-            <Skeleton />
-            <Skeleton />
+            {split_string.map((item) =>
+              i > 0.4 ? (
+                <Box key={v4()} sx={{ opacity: (i = i - 0.2) }}>
+                  {parse(item)}
+                </Box>
+              ) : null
+            )}
           </>
-        ) : (
-          <Typography
-            style={{ whiteSpace: "pre-wrap" }}
-            variant="h6"
-            color="text.secondary"
-          >
-            <Box component="span" sx={{ opacity: 1 }} display="inline">
-              {oneQuestion?.text?.slice(0, 100)}
-            </Box>
-            <Box component="span" sx={{ opacity: 0.8 }} display="inline">
-              {oneQuestion?.text?.slice(100, 200)}
-            </Box>
-            <Box component="span" sx={{ opacity: 0.6 }} display="inline">
-              {oneQuestion?.text?.slice(200, 300)}
-            </Box>
-            <Box component="span" sx={{ opacity: 0.4 }} display="inline">
-              {oneQuestion?.text?.slice(300, 400)}
-            </Box>
-            <Box component="span" sx={{ opacity: 0.2 }} display="inline">
-              {oneQuestion?.text?.slice(400, 500)}
-            </Box>
-          </Typography>
         )}
-      </CardContent>
+      </Box>
+
       {isLoading ? (
         <Skeleton width="60%" />
       ) : (
-        <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
+        <CardActions
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
           <ViewCountBlockFromUtils singleArticle={oneQuestion} />
 
           {oneQuestion?.Comments?.length === 0 ? (

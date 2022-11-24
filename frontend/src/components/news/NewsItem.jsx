@@ -15,6 +15,8 @@ import UserTheSameDeleteEditBlockFromUtils from "../../utils/UserTheSameDeleteEd
 import ItemCommentCountBlockFromUtils from "../../utils/forItems/ItemCommentCountBlockFromUtils.jsx"
 import ItemOpenCommentFormFromUtils from "../../utils/forItems/ItemOpenCommentFormFromUtils.jsx"
 import ViewCountBlockFromUtils from "../../utils/ViewCountBlockFromUtils"
+import parse from "html-react-parser"
+import { v4 } from "uuid"
 
 const NewsItem = ({ oneNews, user, id, isLoading }) => {
   const navigate = useNavigate()
@@ -27,6 +29,9 @@ const NewsItem = ({ oneNews, user, id, isLoading }) => {
     navigate("/news", { state: "/news" })
   }
 
+  const split_string = oneNews?.text?.split("<br>")
+  let i = 1.2
+
   return (
     <>
       <Card
@@ -34,7 +39,7 @@ const NewsItem = ({ oneNews, user, id, isLoading }) => {
           width: "75%",
           height: "75%",
           margin: "auto",
-          padding: 1,
+          paddingX: 2,
           boxShadow: "5px 5px 10px #ccc",
           marginBottom: 3,
           ":hover": {
@@ -43,7 +48,7 @@ const NewsItem = ({ oneNews, user, id, isLoading }) => {
         }}
       >
         {location.pathname === "/" && (
-          <CardContent>
+          <Box sx={{ marginY: 2 }}>
             {isLoading ? (
               <Skeleton />
             ) : (
@@ -51,49 +56,25 @@ const NewsItem = ({ oneNews, user, id, isLoading }) => {
                 News
               </Typography>
             )}
-          </CardContent>
+          </Box>
         )}
-        <CardContent
+        <Box
           component={Link}
           to={`/news/${oneNews.id}`}
-          style={{ textDecoration: "none" }}
+          style={{ textDecoration: "none", color: "black" }}
         >
-          {isLoading ? (
-            <Skeleton />
-          ) : (
-            <Typography variant="h6" color="text.secondary">
-              {oneNews.title}
-            </Typography>
-          )}
-          {isLoading ? (
+          {oneNews.text && (
             <>
-              <Skeleton />
-              <Skeleton />
+              {split_string.map((item) =>
+                i > 0.4 ? (
+                  <Box key={v4()} sx={{ opacity: (i = i - 0.2) }}>
+                    {parse(item)}
+                  </Box>
+                ) : null
+              )}
             </>
-          ) : (
-            <Typography
-              style={{ whiteSpace: "pre-wrap" }}
-              variant="body2"
-              color="text.secondary"
-            >
-              <Box component="span" sx={{ opacity: 1 }} display="inline">
-                {oneNews?.text?.slice(0, 100)}
-              </Box>
-              <Box component="span" sx={{ opacity: 0.8 }} display="inline">
-                {oneNews?.text?.slice(100, 200)}
-              </Box>
-              <Box component="span" sx={{ opacity: 0.6 }} display="inline">
-                {oneNews?.text?.slice(200, 300)}
-              </Box>
-              <Box component="span" sx={{ opacity: 0.4 }} display="inline">
-                {oneNews?.text?.slice(300, 400)}
-              </Box>
-              <Box component="span" sx={{ opacity: 0.2 }} display="inline">
-                {oneNews?.text?.slice(400, 500)}
-              </Box>
-            </Typography>
           )}
-        </CardContent>
+        </Box>
         {isLoading ? (
           <Skeleton width="60%" />
         ) : (

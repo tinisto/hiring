@@ -1,5 +1,6 @@
 import { Avatar, Stack, Typography } from "@mui/material"
 import PersonIcon from "@mui/icons-material/Person"
+import parse from "html-react-parser"
 
 const QuestionByIdMainContent = ({ singleArticle }) => {
   return (
@@ -15,14 +16,7 @@ const QuestionByIdMainContent = ({ singleArticle }) => {
           Published: {new Date(singleArticle?.createdAt).toLocaleString()}
         </Typography>
       </Stack>
-      <Typography
-        style={{ whiteSpace: "pre-wrap" }}
-        variant="h5"
-        color="inherit"
-        paragraph
-      >
-        {singleArticle?.text}
-      </Typography>
+      {singleArticle?.text && parse(singleArticle?.text)}
     </>
   )
 }

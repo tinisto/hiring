@@ -3,8 +3,10 @@ import React from "react"
 import { createArticle, reset } from "../../features/articles/articleSlice"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate, useLocation } from "react-router-dom"
+import ReactQuill from "react-quill"
+import "react-quill/dist/quill.snow.css"
 
-const DiaryAdd = () => {
+const PostAdd = () => {
   const location = useLocation()
   const urlLink = location.pathname.split("/")[1]
   const [alertState, setAlertState] = React.useState(false)
@@ -14,25 +16,19 @@ const DiaryAdd = () => {
   const { isError, message, isSuccess } = useSelector(
     (state) => state.articleStore
   )
-  const [formData, setFormdata] = React.useState({
-    title: "",
-    text: "",
-  })
-  const { title, text } = formData
 
   const onSubmit = (e) => {
     e.preventDefault()
-    const newFormData = { title, text, urlLink }
-    dispatch(createArticle(newFormData))
+    const result = value.replace(/(<p><br><\/p>)/g, "")
+    const result1 = result.replace(/(<\/p><p>)/g, "<br>")
+    const newFormData = { text: result1, urlLink }
 
+    dispatch(createArticle(newFormData))
     if (isSuccess) {
       navigate("/posts", { state: "/posts" })
     }
   }
-  const onChange = (e) => {
-    const { name, value } = e.target
-    setFormdata({ ...formData, [name]: value })
-  }
+
   React.useEffect(() => {
     if (!user) {
       navigate("/login")
@@ -42,38 +38,22 @@ const DiaryAdd = () => {
     }
   }, [user, navigate, isError, reset, dispatch])
 
+  const [value, setValue] = React.useState("")
+
   return (
     <Box
       component="form"
       onSubmit={onSubmit}
-      display="flex"
-      flexDirection={"column"}
-      width="75%"
       margin="auto"
       marginTop={3}
       alignItems="center"
     >
       <Typography variant="h5">Create your story</Typography>
-      <TextField
-        fullWidth
-        margin="normal"
-        variant="outlined"
-        label="Title"
-        type="text"
-        name="title"
-        value={title}
-        onChange={onChange}
-      />
-      <TextField
-        fullWidth
-        margin="normal"
-        variant="outlined"
-        label="Text"
-        type="text"
-        name="text"
-        value={text}
-        onChange={onChange}
-        multiline
+      <ReactQuill
+        theme="snow"
+        value={value}
+        onChange={setValue}
+        placeholder="Write something..."
       />
       {alertState ? (
         <Alert variant="filled" severity="error">
@@ -93,4 +73,4 @@ const DiaryAdd = () => {
     </Box>
   )
 }
-export default DiaryAdd
+export default PostAdd

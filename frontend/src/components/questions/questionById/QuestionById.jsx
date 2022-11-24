@@ -32,7 +32,7 @@ const QuestionById = () => {
   const dispatch = useDispatch()
   const location = useLocation()
   const linkSendToData = location.pathname.split("/")[1]
-  const { isLoading, singleArticle, message } = useSelector(
+  const { isLoading, singleArticle, message, isError } = useSelector(
     (state) => state.articleStore
   )
   const [openCommentBox, setOpenCommentBox] = React.useState(false)
@@ -75,6 +75,7 @@ const QuestionById = () => {
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false)
   }
+  // if (isError) return <NotFoundPage />
 
   return (
     <Container maxWidth="lg">
