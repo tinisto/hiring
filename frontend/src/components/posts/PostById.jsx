@@ -12,20 +12,19 @@ import React from "react"
 import {
   getOneArticleById,
   deleteArticle,
-} from "../../../features/articles/articleSlice.js"
+} from "../../features/articles/articleSlice.js"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate, useParams, useLocation, Link } from "react-router-dom"
-import CommentCreate from "../../comments/CommentCreate"
-import CommentsGetAll from "../../comments/CommentsGetAll"
-import PostByIdMainContent from "./PostByIdMainContent"
-import SnackbarFromUtils from "../../../utils/SnackbarFromUtils"
-import UserTheSameDeleteEditBlockFromUtils from "../../../utils/UserTheSameDeleteEditBlockFromUtils"
-import OpenCommentFormFromUtils from "../../../utils/OpenCommentFormFromUtils"
-import CommentCountBlockFromUtils from "../../../utils/CommentCountBlockFromUtils.jsx"
-import ViewCountBlockFromUtils from "../../../utils/ViewCountBlockFromUtils"
-import NotFoundPage from "../../../pages/NotFoundPage"
+import CommentCreate from "../comments/CommentCreate"
+import CommentsGetAll from "../comments/CommentsGetAll"
+import SnackbarFromUtils from "../../utils/SnackbarFromUtils"
+import UserTheSameDeleteEditBlockFromUtils from "../../utils/UserTheSameDeleteEditBlockFromUtils"
+import OpenCommentFormFromUtils from "../../utils/OpenCommentFormFromUtils"
+import CommentCountBlockFromUtils from "../../utils/CommentCountBlockFromUtils.jsx"
+import ViewCountBlockFromUtils from "../../utils/ViewCountBlockFromUtils"
+import ArticleByIdMainContentFromUtils from "../../utils/ArticleByIdMainContentFromUtils.jsx"
 
-const { getAllComments } = require("../../../features/comments/commentSlice.js")
+const { getAllComments } = require("../../features/comments/commentSlice.js")
 
 const PostById = () => {
   const { id } = useParams()
@@ -76,7 +75,6 @@ const PostById = () => {
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false)
   }
-  // if (isError) return <NotFoundPage />
 
   return (
     <Container maxWidth="lg">
@@ -101,7 +99,7 @@ const PostById = () => {
           </Box>
         ) : (
           <>
-            <PostByIdMainContent singleArticle={singleArticle} />
+            <ArticleByIdMainContentFromUtils singleArticle={singleArticle} />
             <Box display="flex" justifyContent="space-between">
               <ViewCountBlockFromUtils singleArticle={singleArticle} />
 

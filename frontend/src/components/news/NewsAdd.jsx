@@ -30,7 +30,6 @@ const NewsAdd = () => {
   }
 
   React.useEffect(() => {
-    // dispatch(reset())
     if (!user) {
       navigate("/login")
     }

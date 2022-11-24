@@ -1,5 +1,5 @@
 import NewsAll from "./NewsAll"
-import NewsById from "./newsById/NewsById"
+import NewsById from "./NewsById"
 import NewsEdit from "./NewsEdit"
 import NewsAdd from "./NewsAdd"
 

@@ -28,8 +28,6 @@ app.use("/upload", upload.single("file"), (req, res) => {
   res.status(200).json(file.filename)
 })
 
-// app.use("/uploads", express.static(__dirname + "/uploads"))
-// app.use("/upload", require("./routes/upload.js"))
 app.use("/auth", require("./routes/userRouter.js"))
 app.use("/articles", require("./routes/articleRouter.js"))
 app.use("/tasks", require("./routes/taskRoute.js"))

@@ -4,14 +4,9 @@ const CategoryId = 2
 
 // create News
 const createNews = async (req, res) => {
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    return res.status(400).json(errors.array())
-  }
-  const { title, text } = req.body
+  const { text } = req.body
   try {
     const result = await Article.create({
-      title,
       text,
       CategoryId,
       UserId: req.User.id,
@@ -40,7 +35,9 @@ const getAllNews = async (req, res) => {
 // getOneNews _____________________________________________________________________________________
 const getOneNews = async (req, res) => {
   try {
-    result = await Article.findByPk(req.params.id, { include: [User, Comment] })
+    result = await Article.findByPk(req.params.id, {
+      include: [User, Comment],
+    })
     if (!result) {
       return res.status(400).json({ message: "Can't get a News" })
     }
@@ -79,13 +76,9 @@ const removeNews = async (req, res) => {
 
 // editNews _____________________________________________________________________________________
 const editNews = async (req, res) => {
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    return res.status(400).json(errors.array())
-  }
-  const { id, title, text } = req.body
+  const { text } = req.body
   try {
-    if (!title || !text) {
+    if (!text) {
       return res
         .status(400)
         .json({ message: "Please enter all requirement fields" })
@@ -100,7 +93,7 @@ const editNews = async (req, res) => {
 
     if (result.UserId === req.User.id) {
       const result = await Article.update(
-        { title, text },
+        { text },
         { where: { id: req.params.id } }
       )
       res.status(200).json({ result, message: "News was edited successfully" })

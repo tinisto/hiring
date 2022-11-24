@@ -4,14 +4,10 @@ const CategoryId = 3
 
 // createQuestion _____________________________________________________________________________________
 const createQuestion = async (req, res) => {
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    return res.status(400).json(errors.array())
-  }
-  const { title = "question", text } = req.body
+  const { text } = req.body
+  console.log("text", text)
   try {
     const result = await Article.create({
-      title,
       text,
       CategoryId,
       UserId: req.User.id,
@@ -40,8 +36,11 @@ const getAllQuestion = async (req, res) => {
 
 // getOneQuestion _____________________________________________________________________________________
 const getOneQuestion = async (req, res) => {
+  console.log("req.params.id", req.params.id)
   try {
-    result = await Article.findByPk(req.params.id, { include: [User, Comment] })
+    result = await Article.findByPk(req.params.id, {
+      include: [User, Comment],
+    })
     if (!result) {
       return res.status(400).json({ message: "Can't get a Question" })
     }
@@ -82,11 +81,7 @@ const removeQuestion = async (req, res) => {
 
 // editQuestion _____________________________________________________________________________________
 const editQuestion = async (req, res) => {
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    return res.status(400).json(errors.array())
-  }
-  const { id, text } = req.body
+  const { text } = req.body
   try {
     if (!text) {
       return res

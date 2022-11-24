@@ -1,5 +1,5 @@
 import QuestionAll from "./QuestionAll"
-import QuestionById from "./questionById/QuestionById"
+import QuestionById from "./QuestionById"
 import QuestionEdit from "./QuestionEdit"
 import QuestionAdd from "./QuestionAdd"
 

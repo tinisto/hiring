@@ -1,11 +1,4 @@
-import {
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  Skeleton,
-  Typography,
-} from "@mui/material"
+import { Box, Card, CardActions, Skeleton, Typography } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 import { deleteArticle } from "../../features/articles/articleSlice.js"
 import { useDispatch } from "react-redux"

@@ -12,22 +12,21 @@ import React from "react"
 import {
   getOneArticleById,
   deleteArticle,
-} from "../../../features/articles/articleSlice.js"
+} from "../../features/articles/articleSlice.js"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate, useParams, useLocation, Link } from "react-router-dom"
-import CommentCreate from "../../comments/CommentCreate"
-import CommentsGetAll from "../../comments/CommentsGetAll"
-import NewsByIdMainContent from "./NewsByIdMainContent"
-import SnackbarFromUtils from "../../../utils/SnackbarFromUtils"
-import OpenCommentFormFromUtils from "../../../utils/OpenCommentFormFromUtils"
-import UserTheSameDeleteEditBlockFromUtils from "../../../utils/UserTheSameDeleteEditBlockFromUtils"
-import CommentCountBlockFromUtils from "../../../utils/CommentCountBlockFromUtils"
-import ViewCountBlockFromUtils from "../../../utils/ViewCountBlockFromUtils.jsx"
-import NotFoundPage from "../../../pages/NotFoundPage"
+import CommentCreate from "../comments/CommentCreate"
+import CommentsGetAll from "../comments/CommentsGetAll"
+import SnackbarFromUtils from "../../utils/SnackbarFromUtils"
+import UserTheSameDeleteEditBlockFromUtils from "../../utils/UserTheSameDeleteEditBlockFromUtils"
+import OpenCommentFormFromUtils from "../../utils/OpenCommentFormFromUtils"
+import ViewCountBlockFromUtils from "../../utils/ViewCountBlockFromUtils"
+import CommentCountBlockFromUtils from "../../utils/CommentCountBlockFromUtils.jsx"
+import ArticleByIdMainContentFromUtils from "../../utils/ArticleByIdMainContentFromUtils.jsx"
 
-const { getAllComments } = require("../../../features/comments/commentSlice.js")
+const { getAllComments } = require("../../features/comments/commentSlice.js")
 
-const NewsById = () => {
+const QuestionById = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -63,7 +62,7 @@ const NewsById = () => {
   const handleDelete = async (id) => {
     const data = { id, linkSendToData }
     await dispatch(deleteArticle(data))
-    navigate("/news", { state: "/news" })
+    navigate("/questions", { state: "/questions" })
   }
 
   // snackbar
@@ -77,15 +76,11 @@ const NewsById = () => {
     setOpenSnackbar(false)
   }
 
-  // React.useEffect(() => {
-  //   if (isError) return <NotFoundPage />
-  // }, [isError])
-
   return (
     <Container maxWidth="lg">
       <Paper sx={{ mt: 5, padding: 3 }}>
-        <Typography variant="caption" component={Link} to="/news">
-          News
+        <Typography variant="caption" component={Link} to="/questions">
+          Questions
         </Typography>
 
         {isLoading ? (
@@ -104,7 +99,7 @@ const NewsById = () => {
           </Box>
         ) : (
           <>
-            <NewsByIdMainContent singleArticle={singleArticle} />
+            <ArticleByIdMainContentFromUtils singleArticle={singleArticle} />
             <Box display="flex" justifyContent="space-between">
               <ViewCountBlockFromUtils singleArticle={singleArticle} />
 
@@ -120,11 +115,10 @@ const NewsById = () => {
                   openCommentBox={openCommentBox}
                 />
               )}
-
               {user?.id === singleArticle?.User?.id && (
                 <UserTheSameDeleteEditBlockFromUtils
                   handleDelete={handleDelete}
-                  link="news"
+                  link="questions"
                   id={id}
                 />
               )}
@@ -170,4 +164,4 @@ const NewsById = () => {
     </Container>
   )
 }
-export default NewsById
+export default QuestionById

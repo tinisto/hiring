@@ -11,10 +11,10 @@ const {
   editNews,
   removeNews,
 } = require("../controllers/newsController.js")
-router.post("/", protect, newsCreateValidation, checkErrors, createNews)
+router.post("/", protect, createNews)
 router.get("/", getAllNews)
 router.get("/:id", getOneNews)
-router.put("/:id", protect, newsCreateValidation, checkErrors, editNews)
+router.put("/:id", protect, editNews)
 router.delete("/:id", protect, removeNews)
 
 module.exports = router

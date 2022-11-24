@@ -2,7 +2,7 @@ import { Avatar, Stack, Typography } from "@mui/material"
 import PersonIcon from "@mui/icons-material/Person"
 import parse from "html-react-parser"
 
-const QuestionByIdMainContent = ({ singleArticle }) => {
+const ArticleByIdMainContentFromUtils = ({ singleArticle }) => {
   return (
     <>
       <Stack direction="row" spacing={2} marginY={1}>
@@ -20,4 +20,4 @@ const QuestionByIdMainContent = ({ singleArticle }) => {
     </>
   )
 }
-export default QuestionByIdMainContent
+export default ArticleByIdMainContentFromUtils

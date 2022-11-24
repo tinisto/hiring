@@ -18,7 +18,6 @@ const QuestionAll = () => {
 
   React.useEffect(() => {
     dispatch(getArticlesByCategory(urlLink))
-    // dispatch(reset())
   }, [dispatch])
 
   // snackbar

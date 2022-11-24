@@ -4,14 +4,13 @@ const CategoryId = 1
 
 // createPost _____________________________________________________________________________________
 const createPost = async (req, res) => {
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    return res.status(400).json(errors.array())
-  }
-  const { title, text } = req.body
+  // const errors = validationResult(req)
+  // if (!errors.isEmpty()) {
+  //   return res.status(400).json(errors.array())
+  // }
+  const { text } = req.body
   try {
     const result = await Article.create({
-      title,
       text,
       CategoryId,
       UserId: req.User.id,
@@ -41,7 +40,9 @@ const getAllPost = async (req, res) => {
 // getOnePost _____________________________________________________________________________________
 const getOnePost = async (req, res) => {
   try {
-    result = await Article.findByPk(req.params.id, { include: [User, Comment] })
+    result = await Article.findByPk(req.params.id, {
+      include: [User, Comment],
+    })
     if (!result) {
       return res.status(400).json({ message: "Can't get a post" })
     }
@@ -80,13 +81,13 @@ const removePost = async (req, res) => {
 
 // editPost _____________________________________________________________________________________
 const editPost = async (req, res) => {
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    return res.status(400).json(errors.array())
-  }
-  const { id, title, text } = req.body
+  // const errors = validationResult(req)
+  // if (!errors.isEmpty()) {
+  //   return res.status(400).json(errors.array())
+  // }
+  const { text } = req.body
   try {
-    if (!title || !text) {
+    if (!text) {
       return res
         .status(400)
         .json({ message: "Please enter all requirement fields" })
@@ -101,7 +102,7 @@ const editPost = async (req, res) => {
 
     if (result.UserId === req.User.id) {
       const result = await Article.update(
-        { title, text },
+        { text },
         { where: { id: req.params.id } }
       )
       res.status(200).json({ result, message: "Post was edited successfully" })
