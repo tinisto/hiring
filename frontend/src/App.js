@@ -2,6 +2,12 @@ import { Home, Login, Registration } from "./pages"
 import { PostAll, PostEdit, PostAdd, PostById } from "./components/posts"
 import { NewsAll, NewsById, NewsEdit, NewsAdd } from "./components/news"
 import {
+  AdminAll,
+  AdminComment,
+  AdminArticle,
+  AdminUser,
+} from "./components/admin"
+import {
   QuestionAll,
   QuestionById,
   QuestionEdit,
@@ -14,6 +20,7 @@ import Profile from "./pages/Profile"
 import About from "./pages/About"
 import Layout from "./components/Layout"
 import NotFoundPage from "./pages/NotFoundPage"
+import Search from "./pages/Search"
 
 function App() {
   return (
@@ -38,6 +45,11 @@ function App() {
           <Route path="/questions/:id" element={<QuestionById />} />
           <Route path="/questions/edit/:id" element={<QuestionEdit />} />
           <Route path="/questions/add" element={<QuestionAdd />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/admin" element={<AdminAll />} />
+          <Route path="/admin/comments" element={<AdminComment />} />
+          <Route path="/admin/users" element={<AdminUser />} />
+          <Route path="/admin/articles" element={<AdminArticle />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

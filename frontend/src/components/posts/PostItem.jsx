@@ -23,7 +23,6 @@ const PostItem = ({ post, user, id, isLoading }) => {
   }
 
   const split_string = post?.text?.split("<br>")
-  console.log("split_string", split_string)
   let i = 1.2
 
   return (

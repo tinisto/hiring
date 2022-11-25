@@ -16,6 +16,7 @@ import {
   Newspaper,
   QuestionMark,
   Face,
+  SupervisorAccount,
 } from "@mui/icons-material"
 import { Link } from "react-router-dom"
 import { Stack } from "@mui/system"
@@ -26,6 +27,7 @@ const links = [
   { name: "Questions", icon: <QuestionMark /> },
   { name: "Tasks", icon: <Task /> },
   { name: "About", icon: <Face /> },
+  { name: "Admin", icon: <SupervisorAccount /> },
 ]
 
 const Sidebar = ({ user }) => {

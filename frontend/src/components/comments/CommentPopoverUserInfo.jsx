@@ -50,7 +50,12 @@ const CommentPopoverUserInfo = ({ userInfo }) => {
           </Stack>
 
           <Stack direction="row" spacing={2} justifyContent="center">
-            <Button variant="contained" onClick={handleClose} size="small">
+            <Button
+              variant="contained"
+              onClick={handleClose}
+              size="small"
+              disabled
+            >
               Message
             </Button>
             <Button

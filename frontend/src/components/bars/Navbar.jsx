@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@mui/material"
 import PersonIcon from "@mui/icons-material/Person"
+import SearchIcon from "@mui/icons-material/Search"
 
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt"
 import { useSelector, useDispatch } from "react-redux"
@@ -29,6 +30,9 @@ const Search = styled("div")((theme) => ({
   padding: "0 10px",
   borderRadius: 20,
   border: "1px solid #ccc",
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
 }))
 const Icons = styled(Box)((theme) => ({
   backgroundColor: "white",
@@ -38,6 +42,7 @@ const Navbar = () => {
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [query, setQuery] = React.useState("")
 
   const settings = ["Profile", "Logout"]
   const [anchorElNav, setAnchorElNav] = React.useState(null)
@@ -72,6 +77,16 @@ const Navbar = () => {
         console.log(`Sorry, we are out of ${tito}.`)
     }
   }
+  const onSubmit = (e) => {
+    e.preventDefault()
+    setQuery("")
+    console.log("query", query)
+    navigate("/search", { state: query })
+  }
+
+  const onChange = (e) => {
+    setQuery(e.target.value)
+  }
 
   return (
     <>
@@ -88,10 +103,16 @@ const Navbar = () => {
           >
             Blog
           </Button>
-
-          <Search>
-            <InputBase placeholder="Search..." />
-          </Search>
+          <Box component="form" onSubmit={onSubmit} width="500px">
+            <Search>
+              <SearchIcon sx={{ marginRight: 1 }} />
+              <InputBase
+                placeholder="Search..."
+                onChange={onChange}
+                value={query}
+              />
+            </Search>
+          </Box>
           <Icons>
             {user ? (
               <>
