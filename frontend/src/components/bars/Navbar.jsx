@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   IconButton,
+  InputAdornment,
   InputBase,
   Menu,
   MenuItem,
@@ -14,6 +15,7 @@ import {
 } from "@mui/material"
 import PersonIcon from "@mui/icons-material/Person"
 import SearchIcon from "@mui/icons-material/Search"
+import NewspaperIcon from "@mui/icons-material/Newspaper"
 
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt"
 import { useSelector, useDispatch } from "react-redux"
@@ -92,24 +94,27 @@ const Navbar = () => {
     <>
       <AppBar position="static" color="inherit">
         <StyledToolbar>
-          <SentimentSatisfiedAltIcon
-            sx={{ display: { xs: "block", sm: "none" } }}
-          />
-          <Button
-            variant="text"
-            component={Link}
-            to="/"
-            sx={{ display: { xs: "none", sm: "block" } }}
-          >
-            Blog
+          <Button variant="text" component={Link} to="/">
+            <Typography
+              variant="button"
+              sx={{ display: { xs: "none", sm: "block" } }}
+            >
+              Shakopee News
+            </Typography>
+            <NewspaperIcon sx={{ display: { xs: "block", sm: "none" } }} />
           </Button>
-          <Box component="form" onSubmit={onSubmit} width="500px">
-            <Search>
-              <SearchIcon sx={{ marginRight: 1 }} />
+          <Box component="form" onSubmit={onSubmit}>
+            <Search sx={{ display: { xs: "none", sm: "block", md: "block" } }}>
               <InputBase
                 placeholder="Search..."
                 onChange={onChange}
                 value={query}
+                startAdornment={
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                }
+                fullWidth
               />
             </Search>
           </Box>

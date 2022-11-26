@@ -2,7 +2,7 @@ import axios from "axios"
 const URL = "/admin"
 
 // getAllComments _____________________________________________________________________________________
-const getAllComments = async (token) => {
+const getAllComments = async (query, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,

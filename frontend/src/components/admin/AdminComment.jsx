@@ -1,11 +1,8 @@
 import {
   Breadcrumbs,
-  Button,
-  Divider,
   InputAdornment,
   Link,
   Paper,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -28,10 +25,12 @@ const AdminComment = () => {
     dispatch(getAllComments())
   }, [dispatch])
   const { commentsSlice_commentsAll } = useSelector((state) => state.admin)
+  const [query, setQuery] = React.useState("")
 
   const onSubmit = (e) => {
     e.preventDefault()
-    console.log("onSubmit")
+    console.log("query", query)
+    dispatch(getAllComments(query))
   }
   return (
     <>
@@ -45,7 +44,7 @@ const AdminComment = () => {
       <Typography variant="h5" textAlign={"center"} marginTop={2}>
         Comments
       </Typography>
-      {/* <TextField
+      <TextField
         id="outlined-basic"
         label="Search comments"
         variant="outlined"
@@ -60,7 +59,8 @@ const AdminComment = () => {
         sx={{ marginY: 2 }}
         component={"form"}
         onSubmit={onSubmit}
-      /> */}
+        onChange={(e) => setQuery(e.target.value)}
+      />
 
       <TableContainer component={Paper}>
         <Table>
@@ -73,9 +73,13 @@ const AdminComment = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {commentsSlice_commentsAll.map((item) => (
-              <AdminCommentItem item={item} key={item.id} />
-            ))}
+            {commentsSlice_commentsAll
+              .filter((comment) =>
+                comment.commentText.toLowerCase().includes(query)
+              )
+              .map((item) => (
+                <AdminCommentItem item={item} key={item.id} />
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

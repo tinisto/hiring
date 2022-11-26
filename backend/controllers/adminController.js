@@ -1,3 +1,5 @@
+const Sequelize = require("sequelize")
+const Op = Sequelize.Op
 const { User, Article, Comment } = require("../models")
 
 // getAllComments _____________________________________________________________________________________
