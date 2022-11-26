@@ -45,7 +45,7 @@ const AdminComment = () => {
       <Typography variant="h5" textAlign={"center"} marginTop={2}>
         Comments
       </Typography>
-      <TextField
+      {/* <TextField
         id="outlined-basic"
         label="Search comments"
         variant="outlined"
@@ -60,7 +60,7 @@ const AdminComment = () => {
         sx={{ marginY: 2 }}
         component={"form"}
         onSubmit={onSubmit}
-      />
+      /> */}
 
       <TableContainer component={Paper}>
         <Table>

@@ -180,6 +180,15 @@ const Profile = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Button
+        variant="contained"
+        color="error"
+        size="small"
+        sx={{ marginTop: 2 }}
+        disabled
+      >
+        Delete an account
+      </Button>
     </Container>
   )
 }
