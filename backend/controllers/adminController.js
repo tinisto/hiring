@@ -1,5 +1,4 @@
 const Sequelize = require("sequelize")
-const Op = Sequelize.Op
 const { User, Article, Comment } = require("../models")
 
 // getAllComments _____________________________________________________________________________________
@@ -83,4 +82,9 @@ const getAllUsers = async (req, res) => {
   }
 }
 
-module.exports = { getAllComments, editComment, deleteComment, getAllUsers }
+module.exports = {
+  getAllComments,
+  editComment,
+  deleteComment,
+  getAllUsers,
+}

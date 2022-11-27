@@ -113,6 +113,23 @@ export const getAllUsers = createAsyncThunk(
   }
 )
 
+// getSearch _____________________________________________________________________________________
+export const getSearch = createAsyncThunk(
+  "getAllComments",
+  async (_, thunkAPI) => {
+    try {
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 const adminSlice = createSlice({
   name: "admin",
   initialState,

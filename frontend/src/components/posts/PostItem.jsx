@@ -86,6 +86,9 @@ const PostItem = ({ post, user, id, isLoading }) => {
 
             {user?.id === post?.User?.id && (
               <UserTheSameDeleteEditBlockFromUtils
+                // <NewspaperIcon sx={{ display: { xs: "block", sm: "none" } }} />
+
+                sx={{ display: { xs: "block", sm: "none" } }}
                 handleDelete={handleDelete}
                 link="posts"
                 id={post?.id}

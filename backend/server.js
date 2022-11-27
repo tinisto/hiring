@@ -36,6 +36,7 @@ app.use("/questions", require("./routes/questionRouter.js"))
 app.use("/news", require("./routes/newsRouter.js"))
 app.use("/posts/:postId/comments", require("./routes/commentRouter"))
 app.use("/admin", require("./routes/adminRouter"))
+app.use("/search", require("./routes/searchRouter"))
 
 // Serve frontend
 if (process.env.NODE_ENV === "production") {

@@ -13,13 +13,14 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material"
+
 import PersonIcon from "@mui/icons-material/Person"
 import SearchIcon from "@mui/icons-material/Search"
 import NewspaperIcon from "@mui/icons-material/Newspaper"
+import ClearIcon from "@mui/icons-material/Clear"
 
-import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt"
 import { useSelector, useDispatch } from "react-redux"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import React from "react"
 import { logoutUser, reset } from "../../features/auth/authSlice"
 
@@ -41,6 +42,7 @@ const Icons = styled(Box)((theme) => ({
 }))
 
 const Navbar = () => {
+  const location = useLocation()
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -79,15 +81,27 @@ const Navbar = () => {
         console.log(`Sorry, we are out of ${tito}.`)
     }
   }
-  const onSubmit = (e) => {
-    e.preventDefault()
-    setQuery("")
-    console.log("query", query)
-    navigate("/search", { state: query })
-  }
 
   const onChange = (e) => {
     setQuery(e.target.value)
+  }
+
+  const handleClose = () => {
+    setQuery("")
+    navigate("/")
+  }
+
+  React.useEffect(() => {
+    if (location.pathname === "/search") {
+      setQuery(query)
+    } else {
+      setQuery("")
+    }
+  }, [location.pathname])
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+    navigate(`/search/?search_query=${query}`, { state: `${query}` })
   }
 
   return (
@@ -108,13 +122,22 @@ const Navbar = () => {
               <InputBase
                 placeholder="Search..."
                 onChange={onChange}
-                value={query}
                 startAdornment={
                   <InputAdornment position="start">
                     <SearchIcon />
                   </InputAdornment>
                 }
+                endAdornment={
+                  <InputAdornment position="start">
+                    {query !== "" ? (
+                      <IconButton onClick={handleClose}>
+                        <ClearIcon />
+                      </IconButton>
+                    ) : null}
+                  </InputAdornment>
+                }
                 fullWidth
+                value={query}
               />
             </Search>
           </Box>

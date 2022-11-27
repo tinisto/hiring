@@ -53,10 +53,17 @@ const getAllUsers = async (token) => {
   return response.data
 }
 
+// getSearch _____________________________________________________________________________________
+const getSearch = async (query) => {
+  const response = await axios.get(`${URL}/search`)
+  return response.data
+}
+
 const adminService = {
   getAllComments,
   updateComment,
   deleteComment,
   getAllUsers,
+  getSearch,
 }
 export default adminService
